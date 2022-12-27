@@ -1,11 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom'
+import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound';
+import { Login } from './pages/Login';
 
 function App() {
   return (
-    <div className="App">
-    </div>
+    <Routes>
+      <Route path="/" element={ <Login /> }/>
+      <Route path="/home" element={ <Home /> }/>
+      <Route path="*" element={ <NotFound /> }/>
+    </Routes>
   );
-}
+};
 
 export default App;
