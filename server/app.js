@@ -1,43 +1,41 @@
-require('dotenv').config()
-
-import morgan from 'morgan';
-import { connect } from 'mongoose';
+"use strict";
+import * as dotenv from 'dotenv'
+dotenv.config()
+import mongoose from 'mongoose';
 import express from 'express';
 
+import {router as authorsRoutes} from './routes/authorsRoutes.js';
+import {router as booksRoutes} from './routes/booksRoutes.js';
+import {router as commentsRoutes} from './routes/commentsRoutes.js';
+import {router as publishersRoutes} from './routes/publishersRoutes.js';
+import {router as usersRoutes} from './routes/usersRoutes.js';
+
+// express app
 const app = express();
-import User from './models/users.js';
 
-
-connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// connection to mongoose
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then((res) => {
+    console.log('Connected to database');
     app.listen(process.env.PORT);
-    console.log('connected to db');
+    console.log('Listening on port ', process.env.PORT);
 })
 .catch((err) => console.log(err));
 
-
 // middleware
-app.use(morgan('dev'));
+app.use(express.json());
+
 app.use((req, res, next)=> {
     console.log(req.path, req.method);
     next();
 });
 
-
-// mongoose and mongo sandbox routes
-app.get('/add-user', (req, res) => {
-    const user = new User(req.body);
-    user.save()
-        .then((result) => {
-            res.send(result);
-        }).catch((err) => console.log(err));
-
-});
-
-
 // routes
-app.get('/', (req, res) => {
-    res.send('Welcome aboard - ReaderSHIP')
-});
+app.use('/api/authors', authorsRoutes);
+app.use('/api/books', booksRoutes);
+app.use('/api/comments', commentsRoutes);
+app.use('/api/publishers', publishersRoutes);
+app.use('/api/users', usersRoutes);
+
 
 

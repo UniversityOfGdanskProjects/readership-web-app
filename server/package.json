@@ -1,7 +1,6 @@
 {
   "name": "readership-server",
   "version": "0.1.0",
-  "proxy": "https://localhost:5500",
   "description": "",
   "main": "app.js",
   "type": "module",

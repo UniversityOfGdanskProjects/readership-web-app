@@ -1,3 +1,6 @@
+/project_plan
+.env
+
 ### react ###
 .DS_*
 *.log
