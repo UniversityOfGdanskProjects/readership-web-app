@@ -4,11 +4,10 @@ dotenv.config()
 import mongoose from 'mongoose';
 import express from 'express';
 
-import {router as authorsRoutes} from './routes/authorsRoutes.js';
-import {router as booksRoutes} from './routes/booksRoutes.js';
-import {router as commentsRoutes} from './routes/commentsRoutes.js';
-import {router as publishersRoutes} from './routes/publishersRoutes.js';
-import {router as usersRoutes} from './routes/usersRoutes.js';
+import { router as authorsRoutes } from './routes/authorsRoutes.js';
+import { router as booksRoutes } from './routes/booksRoutes.js';
+import { router as commentsRoutes } from './routes/commentsRoutes.js';
+import { router as usersRoutes } from './routes/usersRoutes.js';
 
 // express app
 const app = express();
@@ -34,7 +33,6 @@ app.use((req, res, next)=> {
 app.use('/api/authors', authorsRoutes);
 app.use('/api/books', booksRoutes);
 app.use('/api/comments', commentsRoutes);
-app.use('/api/publishers', publishersRoutes);
 app.use('/api/users', usersRoutes);
 
 
