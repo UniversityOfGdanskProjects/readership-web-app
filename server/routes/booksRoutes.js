@@ -3,29 +3,26 @@
 import express from 'express';
 export const router = express.Router();
 
-// GET all books
-router.get('/', (req, res) => {
-    res.json({msg: "GET all books"});
-});
+import { 
+    getBooks,
+    getBook,
+    createBook,
+    deleteBook,
+    updateBook
+} from '../controllers/booksController.js';
 
-// POST new book
-router.post('/', (req, res) => {
-    res.json({msg: "POST new book"});
-});
+// GET all 
+router.get('/', getBooks);
 
+// GET one
+router.get('/:id', getBook);
 
-// GET a single book
-router.get('/:id', (req, res) => {
-    res.json({msg: "GET one book"});
-});
+// POST new one
+router.post('/', createBook);
 
-// DELETE a single book
-router.delete('/:id', (req, res) => {
-    res.json({msg: "DELETE one book"});
-});
+// DELETE one
+router.delete('/:id', deleteBook);
 
-// UPDATE a single book
-router.patch('/:id', (req, res) => {
-    res.json({msg: "UPDATE one book"});
-});
+// UPDATE one
+router.patch('/:id', updateBook);
 

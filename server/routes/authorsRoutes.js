@@ -3,31 +3,28 @@
 import express from 'express';
 export const router = express.Router();
 
+import { 
+    getAuthors,
+    getAuthor,
+    createAuthor,
+    deleteAuthor,
+    updateAuthor
+} from '../controllers/authorsController.js';
+
 // GET all authors
-router.get('/', (req, res) => {
-    res.json({msg: "GET all authors"});
-});
-
-// POST new author
-router.post('/', (req, res) => {
-    res.json({msg: "POST new author"});
-});
-
+router.get('/', getAuthors);
 
 // GET a single author
-router.get('/:id', (req, res) => {
-    res.json({msg: "GET one author"});
-});
+router.get('/:id', getAuthor);
+
+// POST new author
+router.post('/', createAuthor);
 
 // DELETE a single author
-router.delete('/:id', (req, res) => {
-    res.json({msg: "DELETE one author"});
-});
+router.delete('/:id', deleteAuthor);
 
 // UPDATE a single author
-router.patch('/:id', (req, res) => {
-    res.json({msg: "UPDATE one author"});
-});
+router.patch('/:id', updateAuthor);
 
 
 

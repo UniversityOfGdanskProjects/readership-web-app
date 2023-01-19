@@ -3,27 +3,25 @@
 import express from 'express';
 export const router = express.Router();
 
-// GET all comments
-router.get('/', (req, res) => {
-    res.json({msg: "GET all comments"});
-});
+import { 
+    getComments,
+    getComment,
+    createComment,
+    deleteComment,
+    updateComment
+} from '../controllers/commentsController.js';
 
-// POST new comment
-router.post('/', (req, res) => {
-    res.json({msg: "POST new comment"});
-});
+// GET all 
+router.get('/', getComments);
 
-// GET a single comment
-router.get('/:id', (req, res) => {
-    res.json({msg: "GET one comment"});
-});
+// GET one
+router.get('/:id', getComment);
 
-// DELETE a single comment
-router.delete('/:id', (req, res) => {
-    res.json({msg: "DELETE one comment"});
-});
+// POST new one
+router.post('/', createComment);
 
-// UPDATE a single comment
-router.patch('/:id', (req, res) => {
-    res.json({msg: "UPDATE one comment"});
-});
+// DELETE one
+router.delete('/:id', deleteComment);
+
+// UPDATE one
+router.patch('/:id', updateComment);
