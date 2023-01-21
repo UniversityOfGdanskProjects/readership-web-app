@@ -6,6 +6,7 @@ import App from './App';
 import './assets/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <Router>
     <StrictMode>
