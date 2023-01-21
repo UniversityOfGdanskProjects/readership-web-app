@@ -2,7 +2,6 @@
   "name": "readership-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://localhost:5500",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -39,6 +38,7 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.30.0"
+    "eslint": "^8.32.0",
+    "eslint-plugin-react": "^7.32.1"
   }
 }
