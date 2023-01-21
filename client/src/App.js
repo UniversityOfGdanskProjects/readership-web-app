@@ -6,8 +6,10 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { UserPage } from './pages/UserPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { MyProfilePage } from './pages/MyProfilePage';
+import { ShelfsPage } from './pages/ShelfsPage';
 
 import { Navbar } from './layouts/nav.js'
+import { Header } from './layouts/header.js'
 import { Footer } from './layouts/footer.js'
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
 
   return (
     <>
+    <Header />
     <Navbar />
     <Routes>
       <Route path="/" element={ <LoginPage /> }/>
@@ -23,6 +26,7 @@ function App() {
       <Route path="/home" element={ <HomePage /> }/>
       <Route path="/book/:id" element={ <BookPage /> }/>
       <Route path="/user/:id" element={ <UserPage /> }/>
+      <Route path="/shelfs/:id" element={ <ShelfsPage /> }/>
       <Route path="*" element={ <NotFoundPage /> }/>
     </Routes>
     <Footer />
