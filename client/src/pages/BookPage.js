@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 
-export const Login = () => {
+export const BookPage = () => {
     return ( <div>
         <h1>
-            Login Panel
+            Book
         </h1>
     </div> );
-}
- 
+};

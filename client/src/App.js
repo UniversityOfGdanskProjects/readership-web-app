@@ -1,15 +1,34 @@
-import { Routes, Route } from 'react-router-dom'
-import { Home } from './pages/Home';
-import { NotFound } from './pages/NotFound';
-import { Login } from './pages/Login';
+import { Routes, Route, useSearchParams } from 'react-router-dom'
+import { BookPage } from './pages/BookPage';
+import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/LoginPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { UserPage } from './pages/UserPage';
+import { SignUpPage } from './pages/SignUpPage';
+import { MyProfilePage } from './pages/MyProfilePage';
+
+import { Navbar } from './layouts/nav.js'
+import { Header } from './layouts/header.js'
+import { Footer } from './layouts/footer.js'
 
 function App() {
+
+
   return (
+    <>
+    <Header />
+    <Navbar />
     <Routes>
-      <Route path="/" element={ <Login /> }/>
-      <Route path="/home" element={ <Home /> }/>
-      <Route path="*" element={ <NotFound /> }/>
+      <Route path="/" element={ <LoginPage /> }/>
+      <Route path="/signUp" element={ <SignUpPage /> }/>
+      <Route path="/myProfile" element={ <MyProfilePage /> }/>
+      <Route path="/home" element={ <HomePage /> }/>
+      <Route path="/book" element={ <BookPage /> }/>
+      <Route path="/user" element={ <UserPage /> }/>
+      <Route path="*" element={ <NotFoundPage /> }/>
     </Routes>
+    <Footer />
+    </>
   );
 };
 
