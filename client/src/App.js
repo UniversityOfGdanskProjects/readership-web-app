@@ -20,8 +20,8 @@ function App() {
     <Navbar />
     <Routes>
       <Route path="/" element={ <LoginPage /> }/>
-      <Route path="/signUp" element={ <SignUpPage /> }/>
-      <Route path="/myProfile" element={ <MyProfilePage /> }/>
+      <Route path="/sign-up" element={ <SignUpPage /> }/>
+      <Route path="/my-profile" element={ <MyProfilePage /> }/>
       <Route path="/home" element={ <HomePage /> }/>
       <Route path="/book" element={ <BookPage /> }/>
       <Route path="/user" element={ <UserPage /> }/>

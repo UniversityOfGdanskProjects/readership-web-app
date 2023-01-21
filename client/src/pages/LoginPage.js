@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
+import { LoginForm } from '../components/login/LoginForm'
 
 export const LoginPage = () => {
     return ( <div>
-        <h1>
-            Login Panel
-        </h1>
+        <LoginForm />
     </div> );
 };
  
