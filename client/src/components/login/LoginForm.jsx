@@ -1,9 +1,43 @@
 import { Field, Form, Formik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useGlobal } from "../../services/context/GlobalContext";
+import { useState } from "react";
+import axios from "axios";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
+  const { toLogIn, setIsLog } = useGlobal();
+  const [msg, setMsg] = useState("");
   const handleSubmit = (values) => {
-    console.log(values);
+    axios
+      .post("/api/users/login", values)
+      .then((res) => {
+        //  ok response { isLogin: true,
+        //   email: user.email,
+        //   role: role,
+        //   token }
+        console.log(res);
+        if (res.data.isLogin) {
+          toLogIn(res.data);
+          navigate("/home");
+        } else {
+          setMsg("Niepoprawne logowanie!");
+        }
+      })
+      .catch((err) => {
+        setMsg("Coś poszło nie tak!");
+        console.log(err);
+      });
+  };
+
+  const validateEmail = (value) => {
+    let error;
+    if (!value) {
+      error = "Required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      error = "Invalid email address";
+    }
+    return error;
   };
 
   const validatePassword = (value) => {
@@ -18,9 +52,10 @@ export const LoginForm = () => {
 
   return (
     <div>
+      <div>{msg}</div>
       <Formik
         initialValues={{
-          username: "",
+          email: "",
           password: "",
         }}
         onSubmit={(values) => handleSubmit(values)}
@@ -29,15 +64,15 @@ export const LoginForm = () => {
         {({ errors, touched, isValidating }) => (
           <Form className="flex flex-col m-5 items-center gap-3">
             <Field
-              name="username"
+              name="email"
               type="text"
-              placeholder="username"
-              // validate={validateUsername}
+              placeholder="email"
+              validate={validateEmail}
               required
               className=""
             />
-            {errors.username && touched.username && (
-              <div className="text-red-700">{errors.username}</div>
+            {errors.email && touched.email && (
+              <div className="text-red-700">{errors.email}</div>
             )}
             <Field
               name="password"
@@ -56,7 +91,7 @@ export const LoginForm = () => {
               Submit
             </button>
             <Link to="/sign-up">
-              <button>Sing Up</button>
+              <button>Sign Up</button>
             </Link>
           </Form>
         )}

@@ -1,12 +1,29 @@
 import { Field, Form, Formik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
 export const SignUpForm = () => {
+  const navigate = useNavigate();
   const todayDate = new Date();
   const todayDateStr = todayDate.toISOString().slice(0, 10);
+  const [msg, setMsg] = useState("");
 
   const handleSubmit = (values) => {
-    console.log(values);
+    console.log("Values: ", values);
+    console.log("JSON:", JSON.stringify(values));
+    axios
+      .post("api/users", values)
+      .then((response) => {
+        const res = response.data;
+        console.log("Posted data: ", res);
+        if (res.error) setMsg("E-mail or username already taken.");
+        else setMsg("New account created succesful!");
+      })
+      .catch((err) => {
+        console.log(err);
+        setMsg("E-mail already taken.");
+      });
   };
 
   const validateEmail = (value) => {
@@ -32,15 +49,20 @@ export const SignUpForm = () => {
 
   return (
     <div>
+      <div className="text-center m-3">
+        <div className="text-red-700">{msg}</div>
+      </div>
       <Formik
         initialValues={{
           username: "",
           firstName: "",
-          lsatName: "",
+          lastName: "",
           email: "",
           dateOfBirth: "",
           password: "",
           terms: false,
+          shelfs: [],
+          friends: [],
         }}
         onSubmit={(values) => handleSubmit(values)}
         enableReinitialize={true}
@@ -52,7 +74,6 @@ export const SignUpForm = () => {
               type="text"
               placeholder="username"
               required
-              className=""
             />
             <Field
               name="firstName"

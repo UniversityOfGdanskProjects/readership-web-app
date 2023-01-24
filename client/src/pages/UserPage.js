@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export const UserPage = () => {
+    const { id } = useParams();
     return ( <div>
         <h1>
-            Someones' profile
+            { id } profile
         </h1>
     </div> );
 };
