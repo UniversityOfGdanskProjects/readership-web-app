@@ -29,6 +29,7 @@ export const createAuthor = async (req, res) => {
     // add to the database
     try {
       const author = await Author.create(req.body);
+      // TODO books ref
       res.status(200).json(author);
     } catch (error) {
       res.status(400).json({ error: error.message });
