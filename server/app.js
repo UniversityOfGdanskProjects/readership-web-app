@@ -21,6 +21,8 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 })
 .catch((err) => console.log(err));
 
+// mongoose.set('strictQuery', false); // TODO: delete later 
+
 // middleware
 app.use(express.json());
 

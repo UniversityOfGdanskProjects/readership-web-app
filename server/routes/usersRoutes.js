@@ -6,11 +6,15 @@ import {
     getUser,
     createUser,
     deleteUser,
-    updateUser
+    updateUser,
+    postLoginUser
 } from '../controllers/usersController.js';
 
 // GET all 
 router.get('/', getUsers);
+
+// POST 
+router.post('/login', postLoginUser);
 
 // GET one
 router.get('/:id', getUser);
