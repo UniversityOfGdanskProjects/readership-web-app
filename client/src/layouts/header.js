@@ -1,7 +1,11 @@
-export const Header = () => {
+import { Link } from 'react-router-dom'
+import { useGlobal } from '../services/context/GlobalContext';
 
+export const Header = () => {
+    const {isLoggedIn, toLogOut} = useGlobal();
     const handleLogOut = () => {
         console.log("Log Out")
+        toLogOut();
         // TODO: handleLogOut in header
     }
     // userID = ...
@@ -15,9 +19,11 @@ export const Header = () => {
                     </span>
                 </Link>
                 <div className="flex items-center">
+                    {isLoggedIn ? 
                     <button onClick={ handleLogOut } className="text-sm font-medium text-emerald-600 hover:underline">
                         Log Out
                     </button>
+                    : ""} 
                 </div>
             </div>
         </header>
