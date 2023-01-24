@@ -10,12 +10,9 @@ export const bookSchema = new Schema({
     }, 
     author: [{
         type: mongoose.Schema.Types.ObjectId,
-        // ref: authorSchema
+        ref: 'Author'
     }],
-    shortDescription: {
-        type: String
-    },
-    longDescription: {
+    description: {
         type: String
     },
     genres: [
@@ -39,16 +36,11 @@ export const bookSchema = new Schema({
     commentsAndRatings: [
         { 
             type: Schema.Types.ObjectId, 
-            // ref: commentSchema
+            ref: 'Comment'
         }
     ],
-    isbn10: {
-        type: String
-    },
-    isbn13: {
-        type: String
-    }
+    photo_src: String
     
-}, { timestamps: true });
+}, { timestamps: true, collection: "books" });
 
 export const Book = model('Book', bookSchema);

@@ -1,6 +1,6 @@
-import mongoose, { model } from 'mongoose';
-const Schema = mongoose.Schema
-import { bookSchema } from './booksModel.js'
+import { model, Schema } from 'mongoose';
+
+import { Book } from './booksModel.js'
 
 export const authorSchema = new Schema({
     fullName: {
@@ -8,7 +8,10 @@ export const authorSchema = new Schema({
         require: true
     }, 
     books: [
-        { type: Schema.Types.ObjectId, ref: bookSchema }
+        { 
+            type: Schema.Types.ObjectId, 
+            ref: 'Book' 
+        }
     ],
     photo: String,
     

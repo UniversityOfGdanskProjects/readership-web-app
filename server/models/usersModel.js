@@ -1,55 +1,62 @@
-import mongoose, { model } from 'mongoose';
-const { Schema } = mongoose;
-import {bookSchema} from './booksModel.js'
-import {commentSchema} from './commentsModel.js'
+import { model, Schema } from 'mongoose';
+import { Book } from './booksModel.js'
+import {Comment} from './commentsModel.js'
 
 export const userSchema = new Schema({
     username: {
         type: String,
-        require: true,
+        unique: true,
+        dropDups: true 
+        // required: true,
     },
+        
     firstName: {
         type: String,
-        require: true,
+        // required: true,
     },
-    lsatName: {
+    lastName: {
         type: String,
-        require: true,
+        // required: true,
     },
     email: {
         type: String,
-        require: true,
+        // required: true,
+        unique: true,
+        dropDups: true 
+        
     },
     dateOfBirth: {
         type: Date,
     },
-    termsAndConditions: {
+    terms: {
         type: Boolean,
-        require: true,
+        // required: true,
     },
-    accountType: {
-        type: String, // user
+    password: {
+        type: String,
+        // required: true,
     },
     shelfs: [ // empty or [want to read, currently reading, read, ..to create by user]
-        {
-            shelfTitle: {type: String, require: true},
-            booksOnShelf: [{
-                book: { 
-                    type: Schema.Types.ObjectId, 
-                    // ref: bookSchema 
-                }
+        ["read", [ // 
+            [{
+                type: Schema.Types.ObjectId, 
+                ref: 'Book'
             }]
-        }
+        ]]
     ],
     commentsAndRatings: [
         {commentId: { 
             type: Schema.Types.ObjectId, 
-            // ref: commentSchema 
+            ref: 'Comment'
         }}
+    ],
+
+    friends: [
+        {type: Schema.Types.ObjectId, ref:'User'}
     ]
 
     
-}, { timestamps: true });
+}, { timestamps: true, collection: "users"});
 
 export const User = model('User', userSchema);
 

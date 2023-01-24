@@ -13,7 +13,7 @@ export const commentSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        // ref: userSchema,
+        ref: 'User',
         require: true
     },
     body: {
@@ -24,7 +24,7 @@ export const commentSchema = new Schema({
     },
 
     
-}, { timestamps: true });
+}, { timestamps: true, collection: "comments" });
 
 export const Comment = model('Comment', commentSchema);
 
