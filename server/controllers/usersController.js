@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import { User } from '../models/usersModel.js';
 import log from 'log-to-file';
 import { response } from 'express';
-// import bcrypt from "bcryptjs";
 import { sha256, sha224 } from 'js-sha256';
 import jwt  from 'jsonwebtoken';
 
