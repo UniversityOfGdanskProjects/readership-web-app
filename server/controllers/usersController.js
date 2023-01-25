@@ -34,14 +34,16 @@ export const postLoginUser = async (req, res) => {
             log(`USER ${user.email} LOGGED IN - postLoginUser`)
             return res.status(200).json({
                 isLogin: true,
-                id: user._id,
+                _id: user._id,
+                email: user.email,
                 role: role,
                 token,
                 });
         } 
     }).catch((error) => {
+        log("Email or username not found")
         response.status(404).json({
-        message: "Email not found",
+        message: "Email or username not found",
         error,
         });
     });
@@ -59,6 +61,7 @@ export const getUsers = async (req, res) => {
 export const getUser= async (req, res) => {
     const { id } = req.params;
     if(!mongoose.Types.ObjectId.isValid(id)) {
+        log("User not found- no ObjectId")
         return res.status(404).json({error: 'User not found- no ObjectId'});
     }
 
@@ -103,20 +106,25 @@ export const deleteUser = async (req, res) => {
     if(!user) {
         return res.status(404).json({error: 'User not found'});
     };
+    log(`DELETED user ${id}`);
     res.status(200).json(user);
 }
 
 // UPDATE one
 export const updateUser = async (req, res) => {
     const { id } = req.params;
+    
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
+        log('User not found- no ObjectId');
         return res.status(404).json({error: 'User not found- no ObjectId'});
     };
 
     const user = await User.findOneAndUpdate({_id: id}, {...req.body});
     if(!user) {
+        log('User not found');
         return res.status(404).json({error: 'User not found'});
     };
+    log('User updated');
     res.status(200).json(user);
 };
