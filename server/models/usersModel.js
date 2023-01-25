@@ -36,14 +36,12 @@ export const userSchema = new Schema({
         type: String,
         // required: true,
     },
-    shelfs: [ // empty or [want to read, currently reading, read, ..to create by user]
-        ["read", [ // 
-            [{
-                type: Schema.Types.ObjectId, 
-                ref: 'Book'
-            }]
-        ]]
-    ],
+    shelfs: { // empty or [want to read, currently reading, read, ..to create by user]
+        type: Object,
+        
+        // { type: Schema.Types.ObjectId, 
+        // ref: 'Book'}
+    },
     commentsAndRatings: [
         {commentId: { 
             type: Schema.Types.ObjectId, 
@@ -56,7 +54,7 @@ export const userSchema = new Schema({
     ]
 
     
-}, { timestamps: true, collection: "users"});
+}, { timestamps: true, collection: "users" });
 
 export const User = model('User', userSchema);
 

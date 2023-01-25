@@ -50,7 +50,8 @@ export const postLoginUser = async (req, res) => {
 
 // GET all
 export const getUsers = async (req, res) => {
-    const users = await User.find({email: {$not: /admin@admin.pl/ }}, {username:1, shelfs:1, commentsAndRatings:1, friends:1}).sort({createdAt: -1});
+    const users = await User.find({email: {$not: /admin@admin.pl/ }}, 
+    {username:1, shelfs:1, commentsAndRatings:1, friends:1, email:1}).sort({createdAt: -1});
     log("GET USERS LIST - getUsers");
     res.status(200).json(users);
 };
@@ -81,9 +82,11 @@ export const createUser = async (req, res) => {
     try {
       const user = await User.create(newData);
       log(`CREATED NEW USER - ${user.email}`);
-      res.status(200).json(user);
+      const userWithoutRead = await User.findOneAndUpdate({_id: user.id}, {shelfs: {"read":[]}});
+      const userWithRead = await User.findOne({_id: user._id});
+      res.status(200).json(userWithRead);
     } catch (error) {
-        res.status(400).json({ error: "Email already taken" });
+        res.status(400).json({ error: "Email or username already taken" });
         // throw new Error("Email already taken");
     };
   };
