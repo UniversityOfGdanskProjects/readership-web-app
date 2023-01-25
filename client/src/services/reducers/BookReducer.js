@@ -2,8 +2,7 @@ import {
     ADD_BOOK,
     DELETE_BOOK,
     UPDATE_BOOK,
-    GET_ALL_BOOKS,
-    GET_BOOK
+    GET_ALL_BOOKS
   } from '../actions/BookActions';
 
 const initialState = []
@@ -26,9 +25,6 @@ export const BookReducer = (state=initialState, action) => {
         case GET_ALL_BOOKS:
             console.log("GETALLBOOKS - BookReducer: ", action.payload)
             return [...action.payload]
-
-        case GET_BOOK:
-            return [...state.filter(el => el._id == action.payload._id)]
 
         default:
             return state

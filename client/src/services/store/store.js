@@ -1,4 +1,5 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "@reduxjs/toolkit";
+import { createStore } from 'redux';
 import { UserReducer } from "../reducers/UserReducer";
 import { AuthorReducer } from "../reducers/AuthorReducer";
 import { BookReducer } from "../reducers/BookReducer";
@@ -6,7 +7,7 @@ import { CommentReducer } from "../reducers/CommentReducer";
 import { ShelfReducer } from "../reducers/ShelfReducer";
 
 
-export const reducers = combineReducers({
+const reducer = combineReducers({
     books: BookReducer,
     authors: AuthorReducer,
     comments: CommentReducer,
@@ -14,6 +15,6 @@ export const reducers = combineReducers({
     users: UserReducer,
 });
 
-export const store = configureStore({reducer: reducers});
+const store = createStore(reducer);
 
-// export default store;
+export default store;
