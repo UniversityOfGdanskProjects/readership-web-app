@@ -113,6 +113,7 @@ export const deleteUser = async (req, res) => {
 // UPDATE one
 export const updateUser = async (req, res) => {
     const { id } = req.params;
+    console.log(req);
     
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -125,6 +126,7 @@ export const updateUser = async (req, res) => {
         log('User not found');
         return res.status(404).json({error: 'User not found'});
     };
+    const updatedUser = await User.findOne({_id: user._id});
     log('User updated');
-    res.status(200).json(user);
+    res.status(200).json(updatedUser);
 };
