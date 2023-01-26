@@ -25,7 +25,7 @@ import { getAllShelfsAction } from './services/actions/ShelfActions';
 
 function App() {
   const dispatch = useDispatch(); // zrobić store'a
-  const {loading, setLoading, currentUser } = useGlobal();
+  const { setLoading } = useGlobal();
 
   useLayoutEffect(() => {
     setLoading(true);
@@ -45,10 +45,10 @@ function App() {
       console.log( "\nRESPONSE: ", res);
       console.log("USERS:", res[3].data)
       const users = res[3].data
-      const shelfs = users.map(u => {
-        const shelf = {user_id: u.id, shelfs: u.shelfs}
+      const shelfs = [...users.map(u => {
+        const shelf = {user_id: u._id, shelfs: u.shelfs}
         return shelf
-      })
+      })]
       dispatch(getAllShelfsAction(shelfs));
 
     })
