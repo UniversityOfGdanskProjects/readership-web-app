@@ -4,30 +4,49 @@ import { Link } from 'react-router-dom'
 import { useGlobal } from '../services/context/GlobalContext';
 
 export const Navbar = () => {
-    const {isLoggedIn} = useGlobal();
+    const {isLoggedIn, currentRole} = useGlobal();
 
-    const navLinks = 
-    <ul className="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
+    const adminPanel = (<>
+        <li>
+            <Link to="/admin-users-list"className="hover:underline">
+                Users
+            </Link>
+        </li>
+        <li>
+            <Link to="/find-book"className="hover:underline">
+                Books
+            </Link>
+        </li>
+        </>)
+
+    const userProfile = (
+    <>
         <li>
             <Link to="/home" className="hover:underline">
                 Home
             </Link>
         </li>
         <li>
-            <Link to="/my-profile" className="hover:underline">
-                Profile
+            <Link to="/account-settings" className="hover:underline">
+                Account
             </Link>
         </li>
         <li>
-            <Link to="/home" className="hover:underline">
+            <Link to="/shelfs" className="hover:underline">
                 Shelfs
             </Link>
         </li>
         <li>
-            <Link to="/home"className="hover:underline">
-                Features
+            <Link to="/find-book"className="hover:underline">
+                Books
             </Link>
         </li>
+    </>
+    )
+
+    const navLinks = 
+    <ul className="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
+        {currentRole=="admin" ? adminPanel : userProfile}        
     </ul>
 
 

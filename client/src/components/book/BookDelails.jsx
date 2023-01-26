@@ -106,7 +106,7 @@ export const BookDetails = ({ book }) => {
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 {authors.map((author) =>
                   book.author.map((bookAuthor) => {
-                    author._id == bookAuthor ? author.fullName : "";
+                    return author._id == bookAuthor ? author.fullName : "";
                   })
                 )}
               </h2>

@@ -17,6 +17,7 @@ export function GlobalProvider({ children }) {
     const [currentRole, setcurrentRole] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentUserID, setCurrentUserID] = useState(null);
+    const [currentUserInfo, setCurrentUserInfo] = useState(null);
     
     // const users = useSelector(state => state.users);
 
@@ -24,12 +25,16 @@ export function GlobalProvider({ children }) {
         setIsLoggedIn(false);
         setcurrentRole(null);
         setCurrentUserID(null);
+        setCurrentUserInfo(null)
         navigate("/");
     };
 
     // ok response for login {
     //   isLogin: true,
     //   email: user.email,
+    //   firstName: user.firstName,
+    //   lastName: user.lastName,
+    //   dateOfBirth: user.dateOfBirth,
     //   role: role, admin/user
     //   token,
     //   }
@@ -37,7 +42,14 @@ export function GlobalProvider({ children }) {
         if (data.isLogin) {
             setIsLoggedIn(data.isLogin);
             setcurrentRole(data.role);
-            setCurrentUserID(data._id);
+            if (data.role!=='admin') {
+                setCurrentUserID(data._id);
+                setCurrentUserInfo({
+                    firstName: data.firstName, 
+                    lastName: data.lastName, 
+                    dateOfBirth: data.dateOfBirth
+                });         
+            };
             return true
         }
         return false
@@ -52,7 +64,8 @@ export function GlobalProvider({ children }) {
                 toLogOut,
                 currentUserID,
                 isLoggedIn,
-                currentRole
+                currentRole,
+                currentUserInfo
             }}
         >
             { children }
