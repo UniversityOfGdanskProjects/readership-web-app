@@ -31,11 +31,23 @@ export const postLoginUser = async (req, res) => {
                 );
                 
             const role = user._id==process.env.ADMIN_ID ? "admin" : "user"
+            if(role=="admin") {
+                log(`ADMIN LOGGED IN - postLoginUser`)
+                return res.status(200).json({
+                    isLogin: true,
+                    role: role,
+                    token,
+                    });
+
+            }
             log(`USER ${user.email} LOGGED IN - postLoginUser`)
             return res.status(200).json({
                 isLogin: true,
                 _id: user._id,
                 email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: user.dateOfBirth,
                 role: role,
                 token,
                 });
@@ -52,7 +64,7 @@ export const postLoginUser = async (req, res) => {
 // GET all
 export const getUsers = async (req, res) => {
     const users = await User.find({email: {$not: /admin@admin.pl/ }}, 
-    {username:1, shelfs:1, commentsAndRatings:1, friends:1, email:1}).sort({createdAt: -1});
+    {username:1, shelfs:1, commentsAndRatings:1, friends:1, email:1, firstName:1, dateOfBirth: 1, lastName: 1}).sort({createdAt: -1});
     log("GET USERS LIST - getUsers");
     res.status(200).json(users);
 };
@@ -102,31 +114,42 @@ export const deleteUser = async (req, res) => {
         return res.status(404).json({error: 'User not found- no ObjectId'});
     };
 
-    const user = await User.findOneAndDelete({_id: id});
-    if(!user) {
-        return res.status(404).json({error: 'User not found'});
-    };
-    log(`DELETED user ${id}`);
-    res.status(200).json(user);
+    User.findOneAndDelete({_id: id}).then(re => {
+        log(`DELETED user ${id}`);
+        res.status(200).json({id: id});
+    }).catch(err => {
+        console.log(err);
+        return res.status(404).json({error: err.message});
+    })
+    
 }
 
 // UPDATE one
 export const updateUser = async (req, res) => {
     const { id } = req.params;
-    console.log(req);
-    
+    // console.log(req);
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
         log('User not found- no ObjectId');
         return res.status(404).json({error: 'User not found- no ObjectId'});
     };
 
-    const user = await User.findOneAndUpdate({_id: id}, {...req.body});
-    if(!user) {
-        log('User not found');
-        return res.status(404).json({error: 'User not found'});
-    };
-    const updatedUser = await User.findOne({_id: user._id});
-    log('User updated');
-    res.status(200).json(updatedUser);
+    User.findOne({ email: req.body.email })
+    .then(async user => { 
+        log("USER FOUNDED")
+
+        const compared = sha256(req.body.password) == user.password
+        if (!compared) {
+            log("PASSWORD DOESN'T MATCH")
+            return res.status(400).json({
+                message: "Passwords does not match",
+                error: err,
+        })} else {
+            const user = await User.findOneAndUpdate({_id: id}, {...req.body, password: sha256(req.body.password)});
+            const updatedUser = await User.findOne({_id: user._id});
+            log('User updated');
+            res.status(200).json(updatedUser);
+        };
+    })
+
 };

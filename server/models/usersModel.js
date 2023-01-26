@@ -48,11 +48,6 @@ export const userSchema = new Schema({
             ref: 'Comment'
         }}
     ],
-
-    friends: [
-        {type: Schema.Types.ObjectId, ref:'User'}
-    ]
-
     
 }, { timestamps: true, collection: "users" });
 
