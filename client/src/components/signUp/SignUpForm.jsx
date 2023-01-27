@@ -23,7 +23,7 @@ export const SignUpForm = () => {
         const userData = { ...response.data };
         delete userData.password;
         delete userData.terms;
-        const userData2 = { ...userData, ...response.data._id };
+        const userData2 = { ...userData, _id: response.data._id };
         dispatch(addUserAction(userData2));
         console.log("Posted data: ", userData2);
         if (res.error) setMsg("E-mail or username already taken.");

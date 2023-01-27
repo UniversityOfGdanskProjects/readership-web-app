@@ -15,9 +15,9 @@ export const LastAdded = () => {
   const latest4Elem = latest4.map((book) => (
     <div key={book._id} className="flex justify-center m-2">
       <Link to={`/book/${book._id}`}>
-        <div className="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
+        <div className="flex  flex-row max-w-xl rounded-lg bg-white shadow-lg">
           <img
-            className=" w-full h-96 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg"
+            className=" h-auto object-cover w-48 rounded-t-lg rounded-none rounded-l-lg"
             src={book.photo_src}
             alt=""
           />

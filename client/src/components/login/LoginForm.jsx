@@ -6,28 +6,10 @@ import axios from "axios";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const { toLogIn, setIsLog } = useGlobal();
+  const { toLogIn, setIsLog, loginRequest } = useGlobal();
   const [msg, setMsg] = useState("");
   const handleSubmit = (values) => {
-    axios
-      .post("/api/users/login", values)
-      .then((res) => {
-        //  ok response { isLogin: true,
-        //   email: user.email,
-        //   role: role,
-        //   token }
-        console.log(res);
-        if (res.data.isLogin) {
-          toLogIn(res.data);
-          navigate("/home");
-        } else {
-          setMsg("Niepoprawne logowanie!");
-        }
-      })
-      .catch((err) => {
-        setMsg("Coś poszło nie tak!");
-        console.log(err);
-      });
+    loginRequest(values).then((res) => setMsg(res));
   };
 
   const validateEmail = (value) => {

@@ -26,10 +26,10 @@ function App() {
 
   useEffect(() => {
 
-    const books = axios.get("/api/books")
-    const authors = axios.get("/api/authors")
-    const comments = axios.get("/api/comments")
-    const users = axios.get("/api/users")
+    const books = axios.get("http://localhost:4000/api/books")
+    const authors = axios.get("http://localhost:4000/api/authors")
+    const comments = axios.get("http://localhost:4000/api/comments")
+    const users = axios.get("http://localhost:4000/api/users")
     Promise.all([books, authors, comments, users])
     .then((res) => {
       dispatch(getAllBooksAction(res[0].data));

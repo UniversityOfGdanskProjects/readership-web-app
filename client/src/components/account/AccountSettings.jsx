@@ -7,12 +7,10 @@ import {
   validateEmail,
   validatePassword,
 } from "../../validations/formikValidation";
-import { Navigate } from "react-router-dom";
 
 const AccountSettings = () => {
-  const [passwordCorrect, setPasswordCorrecct] = useState();
-  const todayDate = new Date();
-  const todayDateStr = todayDate.toISOString().slice(0, 10);
+  // const todayDate = new Date();
+  // const todayDateStr = todayDate.toISOString().slice(0, 10);
   const { currentUserID, currentUserInfo, toLogOut } = useGlobal();
   const users = useSelector((state) => state.users);
   const user = users.filter((user) => user._id === currentUserID)[0];
@@ -28,7 +26,7 @@ const AccountSettings = () => {
     console.log(duplicatedMailOrUsername);
     if (duplicatedMailOrUsername.length === 0) {
       axios
-        .patch(`api/users/${currentUserID}`, values)
+        .patch(`http://localhost:4000/api/users/${currentUserID}`, values)
         .then((response) => {
           const res = response.data;
           console.log("Updated account data: ", currentUserID);
@@ -47,7 +45,7 @@ const AccountSettings = () => {
   const deleteAccount = () => {
     console.log("Want to delete account");
     axios
-      .delete(`/users/${currentUserID}`)
+      .delete(`http://localhost:4000/api/users/${currentUserID}`)
       .then((res) => {
         console.log("Account deleted");
         toLogOut();
@@ -89,7 +87,7 @@ const AccountSettings = () => {
             >
               {({ errors, touched }) => (
                 <Form className="flex flex-col m-5 items-center gap-3">
-                  <div>Firstname:</div>
+                  <div>Username:</div>
                   <Field
                     name="username"
                     type="text"

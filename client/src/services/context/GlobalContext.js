@@ -28,18 +28,18 @@ export function GlobalProvider({ children }) {
         setCurrentUserInfo(null)
         navigate("/");
     };
-
+    
     // ok response for login {
-    //   isLogin: true,
-    //   email: user.email,
-    //   firstName: user.firstName,
-    //   lastName: user.lastName,
-    //   dateOfBirth: user.dateOfBirth,
-    //   role: role, admin/user
-    //   token,
-    //   }
-    const toLogIn = (data) => {
-        if (data.isLogin) {
+        //   isLogin: true,
+        //   email: user.email,
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   dateOfBirth: user.dateOfBirth,
+        //   role: role, admin/user
+        //   token,
+        //   }
+        const toLogIn = (data) => {
+            if (data.isLogin) {
             setIsLoggedIn(data.isLogin);
             setcurrentRole(data.role);
             if (data.role!=='admin') {
@@ -54,7 +54,32 @@ export function GlobalProvider({ children }) {
         }
         return false
     }
+    
+    const loginRequest = async (values) => {
+        axios
+      .post("http://localhost:4000/api/users/login", values)
+      .then((res) => {
+        //  ok response { isLogin: true,
+        //   email: user.email,
+        //   role: role,
+        //   token }
+        console.log(res);
+        if (res.data.isLogin) {
+          toLogIn(res.data);
+          navigate("/home");
+        } else {
+          return("Niepoprawne logowanie!");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return("Coś poszło nie tak!");
+      });
+    }
 
+   
+
+    
     return (
         <GlobalContext.Provider
             value={{
@@ -65,7 +90,8 @@ export function GlobalProvider({ children }) {
                 currentUserID,
                 isLoggedIn,
                 currentRole,
-                currentUserInfo
+                currentUserInfo,
+                loginRequest, 
             }}
         >
             { children }
