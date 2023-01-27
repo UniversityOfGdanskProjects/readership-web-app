@@ -3,7 +3,6 @@ dotenv.config();
 import mongoose from 'mongoose';
 import { User } from '../models/usersModel.js';
 import log from 'log-to-file';
-import { response } from 'express';
 import { sha256, sha224 } from 'js-sha256';
 import jwt  from 'jsonwebtoken';
 
@@ -54,7 +53,7 @@ export const postLoginUser = async (req, res) => {
         } 
     }).catch((error) => {
         log("Email or username not found")
-        response.status(404).json({
+        return res.status(404).json({
         message: "Email or username not found",
         error,
         });
@@ -82,7 +81,7 @@ export const getUser= async (req, res) => {
         return res.status(404).json({error: 'User not found'});
     };
     log("USER FOUND - getUser")
-    res.status(200).json(user);
+    return res.status(200).json(user);
 };
 
 
@@ -98,9 +97,9 @@ export const createUser = async (req, res) => {
       log(`CREATED NEW USER - ${user.email}`);
       const userWithoutRead = await User.findOneAndUpdate({_id: user.id}, {shelfs: {"read":[]}});
       const userWithRead = await User.findOne({_id: user._id});
-      res.status(200).json(userWithRead);
+      return res.status(200).json(userWithRead);
     } catch (error) {
-        res.status(400).json({ error: "Email or username already taken" });
+        return res.status(400).json({ error: "Email or username already taken" });
         // throw new Error("Email already taken");
     };
   };
@@ -109,15 +108,18 @@ export const createUser = async (req, res) => {
 // DELETE one
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
+    log("DELETING USER...")
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
+        log("USER NOT FOUND - NO OBJECT ID")
         return res.status(404).json({error: 'User not found- no ObjectId'});
     };
 
-    User.findOneAndDelete({_id: id}).then(re => {
+    User.findOneAndDelete({_id: id}).then(result => {
         log(`DELETED user ${id}`);
-        res.status(200).json({id: id});
+        return res.status(200).json({id: id});
     }).catch(err => {
+        log("COULDN'T DELETED USER")
         console.log(err);
         return res.status(404).json({error: err.message});
     })
