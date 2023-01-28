@@ -31,7 +31,7 @@ export const UserReducer = (state=initialState, action) => {
                 return user
             })]
          case GET_ALL_USERS:
-            console.log('ACTION: ', action.type);
+            console.log('ACTION: ', action.type);    
             return [...action.payload]
            
         default:

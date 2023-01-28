@@ -27,9 +27,10 @@ export const ShelfReducer = (state=initialState, action) => {
             const addShelfState = state.map(UIDAndShelfs => {
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
                     if (UIDAndShelfs.shelfs[action.payload.name] !== undefined) {
-                        UIDAndShelfs.shelfs[action.payload.name]=[]
+                        return UIDAndShelfs.shelfs[action.payload.name]=[]
                     } else {
                         console.log("Shelf does't exists")
+                        return UIDAndShelfs.shelfs[action.payload.name]
                     }
                 } 
                 return UIDAndShelfs

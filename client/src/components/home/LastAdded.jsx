@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import BookCard from "../book/BookCard";
 
 export const LastAdded = () => {
@@ -20,7 +19,7 @@ export const LastAdded = () => {
       })
     );
 
-    return <BookCard book={book} bookAuthors={bookAuthors} />;
+    return <BookCard key={book._id} book={book} bookAuthors={bookAuthors} />;
   });
 
   return (

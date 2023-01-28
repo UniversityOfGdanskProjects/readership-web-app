@@ -42,7 +42,7 @@ export function GlobalProvider({ children }) {
             if (data.isLogin) {
             setIsLoggedIn(data.isLogin);
             setcurrentRole(data.role);
-            if (data.role!=='admin') {
+            if (data.role !=='admin') {
                 setCurrentUserID(data._id);
                 setCurrentUserInfo({
                     firstName: data.firstName, 

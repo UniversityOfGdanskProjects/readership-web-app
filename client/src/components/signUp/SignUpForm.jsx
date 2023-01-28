@@ -17,7 +17,7 @@ export const SignUpForm = () => {
 
   const handleSubmit = (values) => {
     axios
-      .post("/api/users", values)
+      .post("http://localhost:4000/api/users", values)
       .then((response) => {
         const res = response.data;
         const userData = { ...response.data };
@@ -31,7 +31,7 @@ export const SignUpForm = () => {
       })
       .catch((err) => {
         console.log(err);
-        setMsg("E-mail already taken.");
+        setMsg("Couldn't create account.");
       });
   };
 

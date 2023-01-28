@@ -25,7 +25,7 @@ export const LoginForm = () => {
     if (!value) {
       error = "Required";
     } else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$/i.test(value)) {
-      error = "Wrong password";
+      error = "Incorrect password";
     }
     return error;
   };

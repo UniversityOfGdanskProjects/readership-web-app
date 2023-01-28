@@ -55,98 +55,97 @@ const AccountSettings = () => {
   };
 
   return (
-    <div>
-      <div className="bg-gray-200 min-h-screen pt-2 font-mono my-16">
-        <div className="container mx-auto">
-          <div className="inputs w-full max-w-2xl p-6 mx-auto">
-            <h2 className="text-2xl text-gray-900">Account Settings</h2>
-            <div className="text-red-700">{msg}</div>
-            <button
-              type="button"
-              onClick={() => {
-                deleteAccount();
-              }}
-              className=" bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Delete Account
-            </button>
-            <Formik
-              className="mt-6 border-t border-gray-400 pt-4"
-              initialValues={{
-                username: user.username,
-                firstName: currentUserInfo.firstName,
-                lastName: currentUserInfo.lastName,
-                email: user.email,
-                // dateOfBirth: currentUserInfo.dateOfBirth,
-                password: "",
-              }}
-              onSubmit={(values) => handleSubmit(values)}
-              enableReinitialize={true}
-            >
-              {({ errors, touched }) => (
-                <Form className="flex flex-col m-5 items-center gap-3">
-                  <div>Username:</div>
-                  <Field
-                    name="username"
-                    type="text"
-                    placeholder="username"
-                    required
-                  />
-                  <div>Firstname:</div>
-                  <Field
-                    name="firstName"
-                    type="text"
-                    placeholder="firstname"
-                    required
-                  />
-                  <div>Lastname:</div>
-                  <Field
-                    name="lastName"
-                    type="text"
-                    placeholder="lastname"
-                    required
-                  />
-                  <div>Email:</div>
-                  <Field
-                    name="email"
-                    type="text"
-                    placeholder="e-mail"
-                    validate={validateEmail}
-                    required
-                    className=""
-                  />
-                  {errors.email && touched.email && (
-                    <div className="text-red-700">{errors.email}</div>
-                  )}
-                  <div>Confirm password:</div>
-                  <Field
-                    name="password"
-                    type="password"
-                    placeholder="password"
-                    validate={validatePassword}
-                    required
-                  />
-                  {errors.password && touched.password && (
-                    <div className="text-red-700">{errors.password}</div>
-                  )}
-                  {/* <label>Date of birth: </label>
+    <div className="container mx-auto">
+      <div className="inputs w-full max-w-2xl p-6 mx-auto">
+        <h2 className=" text-center text-3xl font-bold text-emerald-600">
+          Account Settings
+        </h2>
+        <div className="text-red-700">{msg}</div>
+        <button
+          type="button"
+          onClick={() => {
+            deleteAccount();
+          }}
+          className=" all-buttons"
+        >
+          Delete Account
+        </button>
+        <Formik
+          className="mt-6 border-t border-gray-400 pt-4"
+          initialValues={{
+            username: user.username,
+            firstName: currentUserInfo.firstName,
+            lastName: currentUserInfo.lastName,
+            email: user.email,
+            // dateOfBirth: currentUserInfo.dateOfBirth,
+            password: "",
+          }}
+          onSubmit={(values) => handleSubmit(values)}
+          enableReinitialize={true}
+        >
+          {({ errors, touched }) => (
+            <Form className="flex flex-col m-5 items-center gap-3">
+              <div>Username:</div>
+              <Field
+                name="username"
+                type="text"
+                placeholder="username"
+                required
+                className="border p-1"
+              />
+              <div>Firstname:</div>
+              <Field
+                name="firstName"
+                type="text"
+                placeholder="firstname"
+                required
+                className="border p-1"
+              />
+              <div>Lastname:</div>
+              <Field
+                name="lastName"
+                type="text"
+                placeholder="lastname"
+                required
+                className="border p-1"
+              />
+              <div>Email:</div>
+              <Field
+                name="email"
+                type="text"
+                placeholder="e-mail"
+                validate={validateEmail}
+                required
+                className="border p-1"
+              />
+              {errors.email && touched.email && (
+                <div className="text-red-700">{errors.email}</div>
+              )}
+              <div>Confirm password:</div>
+              <Field
+                name="password"
+                type="password"
+                placeholder="password"
+                validate={validatePassword}
+                required
+                className="border p-1"
+              />
+              {errors.password && touched.password && (
+                <div className="text-red-700">{errors.password}</div>
+              )}
+              {/* <label>Date of birth: </label>
                   <Field
                     name="dateOfBirth"
                     type="date"
                     max={todayDateStr}
                     placeholder={currentUserInfo.dateOfBirth}
                   /> */}
-                  <button
-                    type="submit"
-                    className=" bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Save changes
-                  </button>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>
+              <button type="submit" className=" all-buttons">
+                Save changes
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

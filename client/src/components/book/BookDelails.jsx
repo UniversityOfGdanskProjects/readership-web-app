@@ -4,11 +4,14 @@ import { useState } from "react";
 import { updateShelfAction } from "../../services/actions/ShelfActions";
 import Rating from "./Rating";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const BookDetails = ({ book }) => {
-  const { currentUserID } = useGlobal();
+  const navigate = useNavigate;
+  const { currentUserID, currentRole } = useGlobal();
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+  const shelfs = useSelector((state) => state.shelfs);
   const user = users.filter((u) => u._id === currentUserID)[0];
   console.log("BOOK DETAILS:", user, book);
   const authors = useSelector((state) => state.authors);
@@ -27,6 +30,11 @@ export const BookDetails = ({ book }) => {
   //   const chooseShelf = user.shelf.map((s) => {
   //     <optons></optons>;
   //   });
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:4000/api/books/${book._id}`)
+      .then(navigate("/home"));
+  };
 
   const handleReadButton = () => {
     console.log("buttonClicked");
@@ -128,15 +136,76 @@ export const BookDetails = ({ book }) => {
                 </div>
               </div>
               <div className="flex">
-                <button
-                  onClick={handleReadButton}
-                  className="title-font font-medium py-2 px-6 focus:outline-none hover:bg-slate-600 rounded text-slate-50 bg-emerald-600"
-                >
-                  {readButtonMsg}
-                </button>
-                <button className="flex ml-auto font-medium text-slate-50 bg-emerald-600 border-0 py-2 px-6 focus:outline-none hover:bg-slate-600 rounded">
-                  Add to shelf
-                </button>
+                {currentRole === "admin" ? (
+                  <>
+                    <button className="flex ml-auto all-buttons">
+                      Delete book
+                    </button>
+                    <button className="flex ml-auto all-buttons">
+                      Update book
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={handleReadButton} className="all-buttons">
+                      {readButtonMsg}
+                    </button>
+                    <div className="realtive">
+                      <button
+                        id="dropdownHoverButton"
+                        data-dropdown-toggle="dropdownHover"
+                        data-dropdown-trigger="hover"
+                        class="all-buttons ml-auto text-center inline-flex items-center "
+                        type="button"
+                      >
+                        Add to shelf
+                      </button>
+                      {/* <!-- Dropdown menu --> */}
+                      <div
+                        id="dropdownHover"
+                        class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
+                      >
+                        <ul
+                          class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                          aria-labelledby="dropdownHoverButton"
+                        >
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Dashboard
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Settings
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Earnings
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Sign out
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

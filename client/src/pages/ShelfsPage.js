@@ -7,6 +7,7 @@ export const ShelfsPage = () => {
     const users = useSelector(state => state.users)
     const {currentUserID } = useGlobal();
     const shelfs = users.filter(u => u._id = currentUserID)[0].shelfs
+    console.log(shelfs);
     
     return ( <div>
         <ShelfNav shelfs={shelfs}/>

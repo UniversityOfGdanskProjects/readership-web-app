@@ -1,5 +1,3 @@
-// TODO Create navbar
-
 import { Link } from 'react-router-dom'
 import { useGlobal } from '../services/context/GlobalContext';
 
@@ -14,18 +12,19 @@ export const Navbar = () => {
         </li>
         <li>
             <Link to="/find-book"className="hover:underline">
-                Books
+                Search Books
+            </Link>
+            </li>
+            <li>
+            <Link to="/add-book" className="hover:underline">
+                Add Books
             </Link>
         </li>
         </>)
 
     const userProfile = (
     <>
-        <li>
-            <Link to="/home" className="hover:underline">
-                Home
-            </Link>
-        </li>
+
         <li>
             <Link to="/account-settings" className="hover:underline">
                 Account
@@ -45,8 +44,13 @@ export const Navbar = () => {
     )
 
     const navLinks = 
-    <ul className="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
-        {currentRole=="admin" ? adminPanel : userProfile}        
+    <ul className="flex flex-row mt-0 mr-6 space-x-8 text-lg font-medium">
+    <li>
+        <Link to="/home" className="hover:underline">
+            Home
+        </Link>
+    </li>
+        {currentRole==="admin" ? adminPanel : userProfile}        
     </ul>
 
 

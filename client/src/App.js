@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import {  Routes, Route, BrowserRouter } from 'react-router-dom'
 import axios from 'axios';
 import { useEffect } from 'react';
 import {useDispatch, } from 'react-redux';
@@ -19,11 +19,13 @@ import { getAllAuthorsAction } from './services/actions/AuthorActions';
 import { getAllCommentsAction } from './services/actions/CommentActions';
 import { getAllUsersAction } from './services/actions/UserActions';
 import { getAllShelfsAction } from './services/actions/ShelfActions';
-import { GlobalProvider } from './services/context/GlobalContext';
 import { SearchBooksPage } from './pages/SearchBooks';
+import { AddBookPage } from './pages/AddBookPage';
+import Shelf from './components/shelfs/Shelf';
 
 function App() {
   const dispatch = useDispatch(); // zrobić store'a
+  const {currentRole} =useGlobal();
 
   useEffect(() => {
 
@@ -55,23 +57,35 @@ function App() {
 
 
   return (
-    <>
-      <GlobalProvider>
+    <div className='min-h-screen'>
         <Header />
         <Navbar />
         <Routes>
           <Route path="/" element={ <LoginPage /> }/>
           <Route path="/sign-up" element={ <SignUpPage /> }/>
-          <Route path="/account-settings" element={ <AccountSettingsPage /> }/>
+          {currentRole === null ? "" :
+          <>
           <Route path="/home" element={ <HomePage /> }/>
           <Route path="/find-book" element={ <SearchBooksPage /> }/>
           <Route path="/book/:id" element={ <BookPage /> }/>
-          <Route path="/user/:id/shelfs" element={ <ShelfsPage /> }/>
+          {currentRole === "admin" ?
+          <>
+          <Route path="/home" element={ <HomePage /> }/>
+          <Route path="/add-book" element={ <AddBookPage /> }/>
+          </>
+          :
+          <>
+          <Route path="/account-settings" element={ <AccountSettingsPage /> }/>
+          <Route path="/shelfs" element={ <ShelfsPage /> }/>
+
+          </>
+          }
+          </>
+        }
           <Route path="*" element={ <NotFoundPage /> }/>
         </Routes>
         <Footer />
-      </GlobalProvider>
-    </>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { Field, Form, Formik } from "formik";
 import axios from 'axios';
@@ -16,8 +15,7 @@ export const SearchBooksPage = () => {
         ).catch(err => {
             console.log(err)
         });
-
-    }
+    };
 
     const results = searched.map(book => {
         const bookAuthors = authors.map((author) =>
@@ -25,8 +23,8 @@ export const SearchBooksPage = () => {
             return author._id === bookAuthor ? author.fullName : "";
         })
         );
-        return <BookCard book={book} bookAuthors={bookAuthors}/>
-    })
+        return <BookCard book={book} key={book._id} bookAuthors={bookAuthors}/>
+    });
 
     return ( <div>
     <div className="relative">
