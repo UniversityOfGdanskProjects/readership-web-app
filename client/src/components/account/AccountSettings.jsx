@@ -9,8 +9,6 @@ import {
 } from "../../validations/formikValidation";
 
 const AccountSettings = () => {
-  // const todayDate = new Date();
-  // const todayDateStr = todayDate.toISOString().slice(0, 10);
   const { currentUserID, currentUserInfo, toLogOut } = useGlobal();
   const users = useSelector((state) => state.users);
   const user = users.filter((user) => user._id === currentUserID)[0];

@@ -1,12 +1,10 @@
 import { Field, Form, Formik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGlobal } from "../../services/context/GlobalContext";
 import { useState } from "react";
-import axios from "axios";
 
 export const LoginForm = () => {
-  const navigate = useNavigate();
-  const { toLogIn, setIsLog, loginRequest } = useGlobal();
+  const { loginRequest } = useGlobal();
   const [msg, setMsg] = useState("");
   const handleSubmit = (values) => {
     loginRequest(values).then((res) => setMsg(res));
@@ -66,14 +64,11 @@ export const LoginForm = () => {
             {errors.password && touched.password && (
               <div className="text-red-700">{errors.password}</div>
             )}
-            <button
-              type="submit"
-              className=" bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-            >
+            <button type="submit" className="all-buttons">
               Submit
             </button>
             <Link to="/sign-up">
-              <button>Sign Up</button>
+              <button className="all-buttons">Sign Up</button>
             </Link>
           </Form>
         )}

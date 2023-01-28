@@ -49,7 +49,9 @@ export const SignUpForm = () => {
           dateOfBirth: "",
           password: "",
           terms: false,
-          shelfs: [],
+          shelfs: { read: [] },
+          comments: [],
+          ratings: [],
         }}
         onSubmit={(values) => handleSubmit(values)}
         enableReinitialize={true}
@@ -101,14 +103,11 @@ export const SignUpForm = () => {
               <Field name="terms" type="checkbox" required />
               <span className="text-zinc-600"> Terms & conditions</span>
             </label>
-            <button
-              type="submit"
-              className=" bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-            >
+            <button type="submit" className="all-buttons">
               Submit
             </button>
             <Link to="/">
-              <button>Log In</button>
+              <button className="all-buttons">Log In</button>
             </Link>
           </Form>
         )}

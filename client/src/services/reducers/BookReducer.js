@@ -8,13 +8,16 @@ import {
 const initialState = []
 
 export const BookReducer = (state=initialState, action) => {
-    console.log('ACTION: ', action.type);
+    
     switch (action.type) {
         case ADD_BOOK:
+            console.log('ACTION: ', action.type);
             return [...state, action.payload]
         case DELETE_BOOK:
-            return [...state.filter(el => el._id != action.payload._id)]
+            console.log('ACTION: ', action.type);
+            return [...state.filter(el => el._id !== action.payload._id)]
         case UPDATE_BOOK:
+            console.log('ACTION: ', action.type);
             // TODO: create option to update
             const newState = [...state.map(el => {
                 if (el._id === action.payload._id) {
@@ -23,7 +26,7 @@ export const BookReducer = (state=initialState, action) => {
             })]
             return newState
         case GET_ALL_BOOKS:
-            console.log("GETALLBOOKS - BookReducer: ", action.payload)
+            console.log('ACTION: ', action.type);
             return [...action.payload]
 
         default:

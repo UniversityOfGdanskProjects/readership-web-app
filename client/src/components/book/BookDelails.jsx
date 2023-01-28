@@ -1,50 +1,47 @@
-import { Link, useParams } from "react-router-dom";
 import { useGlobal } from "../../services/context/GlobalContext";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { updateShelfAction } from "../../services/actions/ShelfActions";
-import { useEffect } from "react";
+import Rating from "./Rating";
 import axios from "axios";
 
 export const BookDetails = ({ book }) => {
-  const users = useSelector((state) => state.users);
   const { currentUserID } = useGlobal();
   const dispatch = useDispatch();
-
-  console.log(users);
-
-  let currentUserInfo = users.filter((u) => u._id === currentUserID)[0];
-  console.log(currentUserInfo);
-  const readShelfList = currentUserInfo.shelfs["read"];
+  const users = useSelector((state) => state.users);
+  const user = users.filter((u) => u._id === currentUserID)[0];
+  console.log("BOOK DETAILS:", user, book);
+  const authors = useSelector((state) => state.authors);
+  const bookAuthors = authors.map((author) =>
+    book.author.map((bookAuthor) => {
+      return author._id === bookAuthor ? author.fullName : "";
+    })
+  );
+  console.log(user);
+  const readShelfList = user.shelfs["read"];
   const [isRead, setIsRead] = useState(readShelfList.indexOf(book._id) !== -1);
   const [readButtonMsg, setReadButtonMsg] = useState(
     isRead ? "Read!:)" : "Add to read"
   );
 
-  //   const chooseShelf = currentUserInfo.shelf.map((s) => {
+  //   const chooseShelf = user.shelf.map((s) => {
   //     <optons></optons>;
   //   });
 
-  const authors = useSelector((state) => state.authors);
-  const bookID = book._id;
-  console.log("BOOKID", bookID);
-  console.log(book);
-
   const handleReadButton = () => {
     console.log("buttonClicked");
-    currentUserInfo = users.filter((u) => u._id === currentUserID)[0];
     if (!isRead) {
       axios
         .patch(`http://localhost:4000/api/users/${currentUserID}`, {
           shelfs: {
-            ...currentUserInfo.shelfs,
-            read: [...currentUserInfo.shelfs["read"], book._id],
+            ...user.shelfs,
+            read: [...user.shelfs["read"], book._id],
           },
         })
         .then((res) => {
           console.log(res);
           console.log("Adding to read:", {
-            read: [...currentUserInfo.shelfs["read"], book._id],
+            read: [...user.shelfs["read"], book._id],
           });
           // action.paylood = {
           //     user_id: currentUserID,
@@ -56,7 +53,7 @@ export const BookDetails = ({ book }) => {
             updateShelfAction({
               user_id: currentUserID,
               shelfToUpDate: {
-                read: [...currentUserInfo.shelfs["read"], book._id],
+                read: [...user.shelfs["read"], book._id],
               },
             })
           );
@@ -67,14 +64,14 @@ export const BookDetails = ({ book }) => {
         .catch((err) => console.log(err));
     } else {
       //
-      const ReadShelfWithoutBook = currentUserInfo.shelfs["read"].filter(
+      const ReadShelfWithoutBook = user.shelfs["read"].filter(
         (bID) => bID !== book._id
       );
       // currentShelfs;
       axios
         .patch(`/api/users/${currentUserID}`, {
           shelfs: {
-            ...currentUserInfo.shelfs,
+            ...user.shelfs,
             read: ReadShelfWithoutBook,
           },
         })
@@ -99,29 +96,35 @@ export const BookDetails = ({ book }) => {
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
+              alt={book.title}
               className=" max-h-[32rem] object-cover object-center  border border-gray-200"
               src={book.photo_src}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                {authors.map((author) =>
-                  book.author.map((bookAuthor) => {
-                    return author._id == bookAuthor ? author.fullName : "";
-                  })
-                )}
+                {bookAuthors}
               </h2>
+
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
                 {book.title}
               </h1>
               <div className="flex mb-4">
                 <span className="flex items-center">
-                  <span className="text-gray-600 ml-3">{/*TODO rating */}</span>
+                  <span className="text-gray-600 ">
+                    {/*TODO rating */}
+                    <Rating book={book} user={user} />
+                  </span>
                 </span>
               </div>
               <p className="leading-relaxed">{book.description}</p>
               <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
-                <div className="flex ml-6 items-center">
-                  <div className="relative"></div>
+                <div className="flex flex-col text-sm">
+                  <div className="">Pages: {book.pages}</div>
+                  <div className="">
+                    Date: {book.publicationDate.slice(0, 10)}
+                  </div>
+                  <div className="">Publisher: {book.publisher}</div>
+                  <div className="">Language: {book.english}</div>
                 </div>
               </div>
               <div className="flex">

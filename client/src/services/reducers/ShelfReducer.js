@@ -1,4 +1,3 @@
-import { current } from '@reduxjs/toolkit';
 import {
     ADD_SHELF,
     DELETE_SHELF,
@@ -18,9 +17,9 @@ const initialState = []
 // }
 
 export const ShelfReducer = (state=initialState, action) => {
-    console.log('ACTION: ', action.type);
     switch (action.type) {
         case ADD_SHELF:
+            console.log('ACTION: ', action.type);
             // action.paylood = {
             //     user_id: currentUserID,
             //     newShelfName: "newShelfName"
@@ -37,6 +36,7 @@ export const ShelfReducer = (state=initialState, action) => {
             })
             return addShelfState
         case DELETE_SHELF:
+            console.log('ACTION: ', action.type);
             // action.paylood = {
             //     user_id: currentUserID,
             //     delShelfName: "delShelfName"
@@ -54,6 +54,7 @@ export const ShelfReducer = (state=initialState, action) => {
             })
             return delShelfState
         case UPDATE_SHELF:
+            console.log('ACTION: ', action.type);
             // action.paylood = {
             //     user_id: currentUserID,
             //     shelfToUpDate: {
@@ -73,7 +74,7 @@ export const ShelfReducer = (state=initialState, action) => {
 
             
         case GET_ALL_SHELF:
-            console.log("GETALLSHELFS - ShelfReducer: ", action.payload);
+            console.log('ACTION: ', action.type);
             return [...action.payload]
 
         default:

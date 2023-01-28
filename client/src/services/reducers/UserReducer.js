@@ -8,16 +8,18 @@ import {
 const initialState = []
 
 export const UserReducer = (state=initialState, action) => {
-    console.log('ACTION: ', action.type);
     switch (action.type) {
         case ADD_USER:
+            console.log('ACTION: ', action.type);
             return [...state, action.payload]
         case DELETE_USER:
+            console.log('ACTION: ', action.type);
             // payload: userID
             return [...state.filter(user=> {
                 return user._id !== action.payload
             })]
         case UPDATE_USER:
+            console.log('ACTION: ', action.type);
             // admin can delete comments
             // TODO: create option to update user
             // payload: { newUserData } // not allUserData   
@@ -29,7 +31,7 @@ export const UserReducer = (state=initialState, action) => {
                 return user
             })]
          case GET_ALL_USERS:
-            console.log("GETALLUSERS - userReducer: ", action.payload)
+            console.log('ACTION: ', action.type);
             return [...action.payload]
            
         default:

@@ -1,12 +1,14 @@
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import ShelfNav from '../components/shelfs/ShelfsNav';
+import { useGlobal } from '../services/context/GlobalContext';
 
 export const ShelfsPage = () => {
-    const {id} = useParams();
+    const users = useSelector(state => state.users)
+    const {currentUserID } = useGlobal();
+    const shelfs = users.filter(u => u._id = currentUserID)[0].shelfs
+    
     return ( <div>
-        <h1>
-            Shelf - {id}
-        </h1>
-        <ul>List of shelfs</ul>
-        <ul>Books on current shelf</ul>
+        <ShelfNav shelfs={shelfs}/>
     </div> );
 };

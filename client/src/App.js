@@ -20,6 +20,7 @@ import { getAllCommentsAction } from './services/actions/CommentActions';
 import { getAllUsersAction } from './services/actions/UserActions';
 import { getAllShelfsAction } from './services/actions/ShelfActions';
 import { GlobalProvider } from './services/context/GlobalContext';
+import { SearchBooksPage } from './pages/SearchBooks';
 
 function App() {
   const dispatch = useDispatch(); // zrobić store'a
@@ -63,6 +64,7 @@ function App() {
           <Route path="/sign-up" element={ <SignUpPage /> }/>
           <Route path="/account-settings" element={ <AccountSettingsPage /> }/>
           <Route path="/home" element={ <HomePage /> }/>
+          <Route path="/find-book" element={ <SearchBooksPage /> }/>
           <Route path="/book/:id" element={ <BookPage /> }/>
           <Route path="/user/:id/shelfs" element={ <ShelfsPage /> }/>
           <Route path="*" element={ <NotFoundPage /> }/>
