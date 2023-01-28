@@ -38,18 +38,27 @@ export const userSchema = new Schema({
     },
     shelfs: { // empty or [want to read, currently reading, read, ..to create by user]
         type: Object,
+        default: {shelfs: {"read":[]}} 
         
         // { type: Schema.Types.ObjectId, 
         // ref: 'Book'}
     },
-    commentsAndRatings: [
-        {commentId: { 
-            type: Schema.Types.ObjectId, 
-            ref: 'Comment'
-        }}
-    ],
+    comments: [
+        { 
+           type: Schema.Types.ObjectId, 
+           ref: 'Comment'
+       }
+   ],
+   ratings: [
+            [{ 
+                type: Schema.Types.ObjectId, 
+                ref: 'Book'
+            }, {
+                type: Number
+            }]
+   ],
     
-}, { timestamps: true, collection: "users" });
+}, { timestamps: true, collection: "users", minimize:false});
 
 export const User = model('User', userSchema);
 

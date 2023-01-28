@@ -33,12 +33,17 @@ export const bookSchema = new Schema({
         type: String,
         require: true
     },
-    commentsAndRatings: [
+    comments: [
         { 
-            type: Schema.Types.ObjectId, 
-            ref: 'Comment'
-        }
-    ],
+           type: Schema.Types.ObjectId, 
+           ref: 'Comment'
+       }
+   ],
+   rating: {
+       'counter' : {type: Number, default: 0},
+       'mean': {type: Number, default: 0}
+   },
+   
     photo_src: String
     
 }, { timestamps: true, collection: "books" });

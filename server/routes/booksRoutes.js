@@ -8,7 +8,8 @@ import {
     getBook,
     createBook,
     deleteBook,
-    updateBook
+    updateBook,
+    searchBooks
 } from '../controllers/booksController.js';
 
 // GET all 
@@ -25,4 +26,7 @@ router.delete('/:id', deleteBook);
 
 // UPDATE one
 router.patch('/:id', updateBook);
+
+// SEARCH many 
+router.get('/search/:search', searchBooks);
 
