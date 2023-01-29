@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { deleteBookAction } from "../../services/actions/BookActions";
+import Swal from "sweetalert2";
 
 export const BookDetails = ({ book, bookAuthors }) => {
   const { currentUserID, currentRole, loading, setLoading } = useGlobal();
@@ -33,6 +34,10 @@ export const BookDetails = ({ book, bookAuthors }) => {
   //     <optons></optons>;
   //   });
 
+  const addToShelf = (shelfName) => {
+    if (shelfName) {
+    }
+  };
   const handleDelete = () => {
     setLoading(true);
     axios.delete(`http://localhost:4000/api/books/${book._id}`).then((res) => {
@@ -173,17 +178,42 @@ export const BookDetails = ({ book, bookAuthors }) => {
                           {readButtonMsg}
                         </button>
                       </div>
-                      <div className="collapse ml-0 m-5">
-                        <input type="checkbox" className="peer" />
-                        <div className=" collapse-title all-buttons peer-checked:bg-secondary peer-checked:text-secondary-content">
-                          Add to shefl
-                        </div>
-                        <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-                          {console.log(Object.keys(userShelfs))}
-                          {Object.keys(userShelfs).map((shelf) => {
-                            <button>{shelf}</button>;
-                          })}
-                        </div>
+                      <div className="dropdown dropdown-top">
+                        <label
+                          tabIndex={0}
+                          className="btn m-1"
+                          onClick={() => {
+                            if (Object.keys(userShelfs).length === 1) {
+                              Swal.fire(
+                                'No shelfs besides "read"!',
+                                'Go to "Shelfs" and create one! :)'
+                              );
+                            }
+                          }}
+                        >
+                          Add to shelf
+                        </label>
+                        {Object.keys(userShelfs).length === 1 ? (
+                          <></>
+                        ) : (
+                          <ul
+                            tabIndex={0}
+                            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                          >
+                            {Object.keys(userShelfs)
+                              .filter((s) => s !== "read")
+                              .map((shelfName) => {
+                                return (
+                                  <button
+                                    key={shelfName}
+                                    onClick={() => addToShelf(shelfName)}
+                                  >
+                                    <li>{shelfName}</li>
+                                  </button>
+                                );
+                              })}
+                          </ul>
+                        )}
                       </div>
                     </div>
                   )}
