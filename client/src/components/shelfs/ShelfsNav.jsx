@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useGlobal } from "../../services/context/GlobalContext";
-import { addShelfAction } from "../../services/actions/ShelfActions";
+import {
+  addShelfAction,
+  deleteShelfAction,
+} from "../../services/actions/ShelfActions";
 import { Form, Formik, Field } from "formik";
 import { useState } from "react";
 import Shelf from "./Shelf";
 import { updateUserAction } from "../../services/actions/UserActions";
+import Swal from "sweetalert2/src/sweetalert2.js";
 
 const ShelfNav = () => {
   const { currentUserID } = useGlobal();
@@ -17,7 +21,6 @@ const ShelfNav = () => {
   console.log(userShelfs);
   console.log(Object.keys(userShelfs));
   const [currentShelf, setCurrentShelf] = useState("read");
-  const [msg, setMsg] = useState("");
   const dispatch = useDispatch();
 
   const validateShelf = (value) => {
@@ -26,10 +29,50 @@ const ShelfNav = () => {
     if (anotherShelfs !== undefined) {
       return error;
     }
+    if (!/^[A-Za-z0-9_ *]*$/.test(value)) {
+      return error;
+    }
+  };
+
+  const deleteShelf = (shelfName) => {
+    Swal.fire({
+      title: `Remove "${shelfName}" shelf?`,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const tmp = shelfName;
+        delete tmp[shelfName];
+        const dataToUpdate = { shelfs: tmp };
+        axios
+          .patch(`http://localhost:4000/api/users/${currentUserID}`, {
+            shelfs: { ...userShelfs, ...dataToUpdate },
+          })
+          .then((res) => {
+            console.log("Updated account data: ", currentUserID, res.data);
+            dispatch(updateUserAction(res.data));
+            dispatch(
+              deleteShelfAction({
+                user_id: currentUserID,
+                delShelfName: shelfName,
+              })
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        Swal.fire("", `Shelf: "${shelfName}" has removed`);
+      }
+    });
   };
 
   const handleSubmit = (values) => {
-    const dataToAdd = { [values.shelf]: [] };
+    if (userShelfs[values.newShelfName] !== undefined) {
+      Swal.fire("Couldn't create shelf");
+      return;
+    }
+    const dataToAdd = { [values.newShelfName]: [] };
     console.log("Data to add:", dataToAdd);
     axios
       .patch(`http://localhost:4000/api/users/${currentUserID}`, {
@@ -39,40 +82,49 @@ const ShelfNav = () => {
         console.log("Updated account data: ", currentUserID, response.data);
         dispatch(updateUserAction(response.data));
         dispatch(
-          addShelfAction({ userID: currentUserID, newShelfName: values.shelf })
+          addShelfAction({
+            user_id: currentUserID,
+            newShelfName: values.newShelfName,
+          })
         );
-        setMsg("Added new shelf!");
+        Swal.fire({
+          title: "Added new shelf",
+        });
       })
       .catch((err) => {
         console.log(err);
-        setMsg("Couldn't create shelf.");
+        Swal.fire({
+          title: "Shelf already exists!",
+        });
       });
   };
   return (
     <div className="flex-col ml-5">
-      <div>{msg}</div>
       <div className="flex-column align-baseline m-5">
         <div className="text-2xl font-medium">Add new shelf: </div>
         <Formik
           initialValues={{
-            shelf: "",
+            newShelfName: "",
           }}
-          onSubmit={(values) => handleSubmit(values)}
+          onSubmit={(values, { resetForm }) => {
+            handleSubmit(values);
+            resetForm();
+          }}
           enableReinitialize={true}
           className="justify-center"
         >
           {({ errors, touched, isValidating }) => (
             <Form className="flex-row m-5 items-center gap-3">
               <Field
-                name="shelf"
+                name="newShelfName"
                 type="text"
                 placeholder="new shelf"
                 validate={validateShelf}
                 required
                 className=""
-              />{" "}
-              {errors.shelf && (
-                <div className="text-red-700">{errors.shelf}</div>
+              />
+              {errors.newShelfName && (
+                <div className="text-red-700">{errors.newShelfName}</div>
               )}
               <button type="submit" className="all-buttons">
                 Submit
@@ -91,6 +143,30 @@ const ShelfNav = () => {
                 key={shelfName}
                 className="hover:underline text-xl font-medium ml-5"
               >
+                {shelfName !== "read" ? (
+                  <button
+                    className="hover:bg-red-700 bg-red-300 text-white mr-2 mt-0.5 rounded"
+                    onClick={() => deleteShelf(shelfName)}
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  ""
+                )}
                 <button
                   className="hover:underline"
                   onClick={() => setCurrentShelf(shelfName)}
@@ -102,12 +178,12 @@ const ShelfNav = () => {
           })}
         </ul>
       </div>
-      <Shelf
+      {/* <Shelf
         name={currentShelf}
         setCurrentShelf={setCurrentShelf}
         userShelfs={userShelfs}
         key={currentShelf}
-      />
+      /> */}
     </div>
   );
 };

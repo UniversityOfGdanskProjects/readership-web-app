@@ -9,7 +9,7 @@ import {
 } from "../../validations/formikValidation";
 
 const AccountSettings = () => {
-  const { currentUserID, currentUserInfo, toLogOut } = useGlobal();
+  const { currentUserID, currentUser, toLogOut } = useGlobal();
   const users = useSelector((state) => state.users);
   const user = users.filter((user) => user._id === currentUserID)[0];
   const otherUsers = users.filter((user) => user._id !== currentUserID);
@@ -73,11 +73,11 @@ const AccountSettings = () => {
         <Formik
           className="mt-6 border-t border-gray-400 pt-4"
           initialValues={{
-            username: user.username,
-            firstName: currentUserInfo.firstName,
-            lastName: currentUserInfo.lastName,
-            email: user.email,
-            // dateOfBirth: currentUserInfo.dateOfBirth,
+            username: currentUser.username,
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            email: currentUser.email,
+            // dateOfBirth: currentUser.dateOfBirth,
             password: "",
           }}
           onSubmit={(values) => handleSubmit(values)}
@@ -138,7 +138,7 @@ const AccountSettings = () => {
                     name="dateOfBirth"
                     type="date"
                     max={todayDateStr}
-                    placeholder={currentUserInfo.dateOfBirth}
+                    placeholder={currentUser.dateOfBirth}
                   /> */}
               <button type="submit" className=" all-buttons">
                 Save changes

@@ -35,6 +35,7 @@ export const SignUpForm = () => {
       })
       .catch((err) => {
         console.log(err);
+        setMsg2("");
         setMsg("Couldn't create account.");
       });
   };

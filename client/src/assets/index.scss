@@ -5,8 +5,11 @@
 $main-color: #057a55;
 
 @layer base {
+  .button-hover {
+    @apply hover:bg-slate-600;
+  }
   .all-buttons {
-    @apply bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded;
+    @apply bg-emerald-600 button-hover text-white font-bold py-2 px-4 rounded;
   }
 
   input {
@@ -14,9 +17,10 @@ $main-color: #057a55;
   }
 
   .nav-buttons {
-    @apply bg-emerald-600 hover:bg-slate-600 text-white font-bold py-2 px-4;
+    @apply bg-emerald-600  text-white font-bold py-2 px-4;
   }
 }
+@import "@sweetalert2/theme-bootstrap-4/bootstrap-4.scss";
 
 h1,
 h2 {

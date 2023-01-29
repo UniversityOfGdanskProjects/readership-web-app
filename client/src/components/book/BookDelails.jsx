@@ -7,7 +7,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { deleteBookAction } from "../../services/actions/BookActions";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2/src/sweetalert2.js";
+import { updateUserAction } from "../../services/actions/UserActions";
 
 export const BookDetails = ({ book, bookAuthors }) => {
   const { currentUserID, currentRole, loading, setLoading } = useGlobal();
@@ -35,9 +36,64 @@ export const BookDetails = ({ book, bookAuthors }) => {
   //   });
 
   const addToShelf = (shelfName) => {
-    if (shelfName) {
-    }
+    console.log("shelfName", shelfName, "\nuserShelfs", userShelfs);
+    const tmp = userShelfs[shelfName];
+    tmp.push(book._id);
+    const dataToUpdate = { [shelfName]: tmp };
+    console.log("dataToUpdate", dataToUpdate);
+    axios
+      .patch(`http://localhost:4000/api/users/${currentUserID}`, {
+        shelfs: { ...userShelfs, ...dataToUpdate },
+      })
+      .then((res) => {
+        console.log("Updated account data: ", currentUserID, res.data);
+        dispatch(updateUserAction(res.data));
+        dispatch(
+          updateShelfAction({
+            user_id: currentUserID,
+            shelfToUpDate: dataToUpdate,
+          })
+        );
+        Swal.fire("", `${book.title} added to "${shelfName}"`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  const deleteFromShelf = (shelfName) => {
+    Swal.fire({
+      title: `Remove ${book.title} from ${shelfName} ?`,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("To delete:", shelfName, userShelfs, userShelfs[shelfName]);
+        const dataToUpdate = {
+          [shelfName]: userShelfs[shelfName].filter((b) => b !== book._id),
+        };
+        axios
+          .patch(`http://localhost:4000/api/users/${currentUserID}`, {
+            shelfs: { ...userShelfs, ...dataToUpdate },
+          })
+          .then((res) => {
+            console.log("Updated account data: ", currentUserID, res.data);
+            dispatch(updateUserAction(res.data));
+            dispatch(
+              updateShelfAction({
+                user_id: currentUserID,
+                shelfToUpDate: dataToUpdate,
+              })
+            );
+            Swal.fire("", `${book.title} removed from "${shelfName}"`);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
   const handleDelete = () => {
     setLoading(true);
     axios.delete(`http://localhost:4000/api/books/${book._id}`).then((res) => {
@@ -152,7 +208,7 @@ export const BookDetails = ({ book, bookAuthors }) => {
                   <div className="flex flex-col text-sm">
                     <div className="">Pages: {book.pages}</div>
                     <div className="">
-                      Date: {book.publicationDate.slice(0, 10)}
+                      Publication day: {book.publicationDate.slice(0, 10)}
                     </div>
                     <div className="">Publisher: {book.publisher}</div>
                     <div className="">Language: {book.language}</div>
@@ -169,7 +225,7 @@ export const BookDetails = ({ book, bookAuthors }) => {
                       </button>
                     </>
                   ) : (
-                    <div>
+                    <div className="flex items-center gap-x-5">
                       <div>
                         <button
                           onClick={handleReadButton}
@@ -181,7 +237,7 @@ export const BookDetails = ({ book, bookAuthors }) => {
                       <div className="dropdown dropdown-top">
                         <label
                           tabIndex={0}
-                          className="btn m-1"
+                          className=" all-buttons "
                           onClick={() => {
                             if (Object.keys(userShelfs).length === 1) {
                               Swal.fire(
@@ -203,13 +259,46 @@ export const BookDetails = ({ book, bookAuthors }) => {
                             {Object.keys(userShelfs)
                               .filter((s) => s !== "read")
                               .map((shelfName) => {
+                                console.log(userShelfs, shelfName);
                                 return (
-                                  <button
-                                    key={shelfName}
-                                    onClick={() => addToShelf(shelfName)}
-                                  >
-                                    <li>{shelfName}</li>
-                                  </button>
+                                  <div key={shelfName}>
+                                    {userShelfs[shelfName].indexOf(book._id) !==
+                                    -1 ? (
+                                      <li>
+                                        <span
+                                          className="hover:bg-red-700 bg-red-300 text-white mr-2 mt-0.5 rounded"
+                                          onClick={() =>
+                                            deleteFromShelf(shelfName)
+                                          }
+                                        >
+                                          <svg
+                                            className="h-4 w-4"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            aria-hidden="true"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="2"
+                                              d="M6 18L18 6M6 6l12 12"
+                                            />
+                                          </svg>
+                                          {shelfName}
+                                        </span>
+                                      </li>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          addToShelf(shelfName);
+                                        }}
+                                      >
+                                        <li>{shelfName}</li>
+                                      </button>
+                                    )}
+                                  </div>
                                 );
                               })}
                           </ul>

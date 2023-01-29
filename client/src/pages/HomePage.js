@@ -6,18 +6,12 @@ export const HomePage = () => {
     const books = useSelector((state) => state.books);
 
     const latest = books.sort((a, b) => {
-      if (a.publicationDay < b.publicationDay) return 1;
+      if (a.publicationDay > b.publicationDay) return 1;
       else return -1;
     });
     const latest4 = latest.slice(0, 4);
     const latest4Elem = latest4.map((book) => {
-      const bookAuthors = authors.map((author) =>
-        book.author.map((bookAuthor) => {
-          return author._id === bookAuthor ? author.fullName : "";
-        })
-      );
-  
-      return <BookCard key={book._id} book={book} bookAuthors={bookAuthors} />;
+      return <BookCard key={book._id} book={book} />;
     });
   
     return (

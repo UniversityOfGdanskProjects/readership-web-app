@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const BookCard = ({ book, bookAuthors }) => {
+const BookCard = ({ book }) => {
+  const bookAuthors = useSelector((state) => {
+    return state.authors.map((author) =>
+      book.author.map((bookAuthor) => {
+        return author._id === bookAuthor ? author.fullName : "";
+      })
+    );
+  });
+
   return (
     <div key={book._id} className="flex justify-center m-2">
       <Link to={`/book/${book._id}`}>

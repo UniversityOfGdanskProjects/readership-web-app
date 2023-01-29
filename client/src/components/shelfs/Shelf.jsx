@@ -7,13 +7,17 @@ const Shelf = ({ name }) => {
   const { currentUserID, loading, setLoading } = useGlobal();
   const books = useSelector((state) => state.books);
   const authors = useSelector((state) => state.authors);
-  const userShelfs2 = useSelector((state) => state.shelfs);
-  console.log("user Shelf2:", userShelfs2);
-
-  useEffect(() => {}, [userShelfs2]);
+  const userShelfs = useSelector((state) => {
+    const shelfs = state.shelfs;
+    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0][
+      "shelfs"
+    ];
+    console.log("Returning userShelfs state...", userShelfs);
+    return userShelfs;
+  });
 
   // bookTitle: [authors]
-  const booksOnShelf = userShelfs2[name].map((bookID) => {
+  const booksOnShelf = userShelfs[name].map((bookID) => {
     return books.filter((book) => book._id === bookID)[0];
   });
 

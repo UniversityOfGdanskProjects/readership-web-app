@@ -25,12 +25,15 @@ export const ShelfReducer = (state=initialState, action) => {
             //     newShelfName: "newShelfName"
             // }
             const addShelfState = state.map(UIDAndShelfs => {
+                console.log("UIDSHELF", UIDAndShelfs)
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
-                    if (UIDAndShelfs.shelfs[action.payload.name] !== undefined) {
-                        return UIDAndShelfs.shelfs[action.payload.name]=[]
+                    console.log("USER:", UIDAndShelfs)
+                    if (UIDAndShelfs.shelfs[action.payload.newShelfName] === undefined) {
+                        console.log("NEW SHLEF:", UIDAndShelfs)
+                        return {...UIDAndShelfs, shelfs: {...UIDAndShelfs['shelfs'], [action.payload.newShelfName]: []}}
                     } else {
-                        console.log("Shelf does't exists")
-                        return UIDAndShelfs.shelfs[action.payload.name]
+                        console.log("Shelf exists")
+                        return UIDAndShelfs
                     }
                 } 
                 return UIDAndShelfs
@@ -45,9 +48,10 @@ export const ShelfReducer = (state=initialState, action) => {
             // }
             const delShelfState = state.map(UIDAndShelfs => {
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
-                    if (UIDAndShelfs.shelfs[action.payload.name] !== undefined 
-                        && action.payload.name !== 'read') {
-                        delete UIDAndShelfs.shelfs[action.payload.name]
+                    if (UIDAndShelfs.shelfs[action.payload.delShelfName] !== undefined 
+                        && action.payload.delShelfName !== 'read') {
+                        delete UIDAndShelfs.shelfs[action.payload.delShelfName]
+                        console.log("After deleted shelf", UIDAndShelfs);
                     } else {
                         console.log("Shelf does't exists or is 'read'")
                     }
@@ -63,7 +67,7 @@ export const ShelfReducer = (state=initialState, action) => {
             //             shelfName: [books]
             //      }
             // }
-            console.log("UPDATE_SHELL - state before:", state);
+            console.log("UPDATE_SHELF - state before:", state);
             const updateShelfState = state.map(UIDAndShelfs => {
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
                     const updatedShelf = {...UIDAndShelfs.shelfs, ...action.payload.shelfToUpDate}
