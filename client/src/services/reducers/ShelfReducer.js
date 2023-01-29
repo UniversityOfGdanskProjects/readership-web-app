@@ -8,13 +8,13 @@ import {
 const initialState = []
 
 // SHELFS:
-// {
+// [{
 //     user_id : id,
 //     shelfs: {
 //         read: [books..],
 //         ...
 //     }
-// }
+// }]
 
 export const ShelfReducer = (state=initialState, action) => {
     switch (action.type) {
@@ -35,6 +35,7 @@ export const ShelfReducer = (state=initialState, action) => {
                 } 
                 return UIDAndShelfs
             })
+            console.log(action.payload, "Added new Shelf", addShelfState)
             return addShelfState
         case DELETE_SHELF:
             console.log('ACTION: ', action.type);
@@ -65,7 +66,9 @@ export const ShelfReducer = (state=initialState, action) => {
             console.log("UPDATE_SHELL - state before:", state);
             const updateShelfState = state.map(UIDAndShelfs => {
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
-                    UIDAndShelfs.shelfs = {...UIDAndShelfs.shelfs, ...UIDAndShelfs.shelfs[action.payload.shelfToUpDate]}
+                    const updatedShelf = {...UIDAndShelfs.shelfs, ...action.payload.shelfToUpDate}
+                    console.log("Changed shelf: ", updatedShelf)
+                    return {...UIDAndShelfs, shelfs: updatedShelf}
                 } 
                 return UIDAndShelfs
             })

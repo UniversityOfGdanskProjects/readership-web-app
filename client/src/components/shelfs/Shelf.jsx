@@ -1,18 +1,19 @@
 import { useSelector } from "react-redux";
 import { useGlobal } from "../../services/context/GlobalContext";
 import BookCard from "../book/BookCard";
+import { useEffect } from "react";
 
 const Shelf = ({ name }) => {
-  const { currentUserID } = useGlobal();
-  const allShelfs = useSelector((state) => state.shelfs);
-  const userShelfs = allShelfs.filter((sh) => sh.user_id === currentUserID)[0][
-    "shelfs"
-  ];
+  const { currentUserID, loading, setLoading } = useGlobal();
   const books = useSelector((state) => state.books);
   const authors = useSelector((state) => state.authors);
+  const userShelfs2 = useSelector((state) => state.shelfs);
+  console.log("user Shelf2:", userShelfs2);
+
+  useEffect(() => {}, [userShelfs2]);
 
   // bookTitle: [authors]
-  const booksOnShelf = userShelfs[name].map((bookID) => {
+  const booksOnShelf = userShelfs2[name].map((bookID) => {
     return books.filter((book) => book._id === bookID)[0];
   });
 

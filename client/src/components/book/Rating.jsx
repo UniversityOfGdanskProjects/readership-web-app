@@ -4,12 +4,15 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { updateUserAction } from "../../services/actions/UserActions";
 import { updateBookAction } from "../../services/actions/BookActions";
+import { useGlobal } from "../../services/context/GlobalContext";
 
-const Rating = ({ book, user }) => {
+const Rating = ({ book }) => {
+  const { currentUser, setCurrentUser, loading, setLoading } = useGlobal();
   const dispatch = useDispatch();
+  console.log("currentUser", currentUser);
 
   const showRating = () => {
-    const filteredRating = user.ratings.filter((IdAndRate) => {
+    const filteredRating = currentUser.ratings.filter((IdAndRate) => {
       if (IdAndRate[0] === book._id) {
         return true;
       } else return false;
@@ -37,13 +40,13 @@ const Rating = ({ book, user }) => {
     console.log("And here");
     try {
       console.log("oho here: ", newCounter, newMean);
-      const updatedRatings = user.ratings.map((IdAndRating) => {
+      const updatedRatings = currentUser.ratings.map((IdAndRating) => {
         if (IdAndRating[0] === book._id) {
           return [book._id, newRating];
         } else return IdAndRating;
       });
       const userUpdated = await axios.patch(
-        `http://localhost:4000/api/users/${user._id}`,
+        `http://localhost:4000/api/users/${currentUser._id}`,
         { ratings: updatedRatings }
       );
       const bookUpdated = await axios.patch(
@@ -54,7 +57,7 @@ const Rating = ({ book, user }) => {
         console.log("Here next", res.data);
         dispatch(updateUserAction(res[0].data));
         dispatch(updateBookAction(res[1].data));
-        console.log("ADED RATING: ", user.ratings, book.rating);
+        console.log("ADED RATING: ", currentUser.ratings, book.rating);
         setIsRated(showRating());
       });
     } catch (error) {
@@ -63,7 +66,7 @@ const Rating = ({ book, user }) => {
       return error;
     }
     console.log("after all");
-    console.log("RATING: ", user, book);
+    console.log("RATING: ", currentUser, book);
   };
 
   return (

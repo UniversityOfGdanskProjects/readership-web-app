@@ -23,18 +23,12 @@ export const getBook= async (req, res) => {
     return res.status(200).json(book);
 };
 
+// SEARCH one
 export const searchBooks= async (req, res) => {
-    console.log("szukam")
+    console.log("Searching book")
     const { search } = req.params;
     if(/^[A-Za-z0-9]/.test(search)) {
         const books = await Book.find({title: {$regex : search}});
-        // if(!book) {
-        //     return res.status(404).json({error: 'Book not found'});
-
-        // } else {
-            
-        // }
-        console.log(books)
         return res.status(200).json(books);
     };
     return res.status(200).json({});

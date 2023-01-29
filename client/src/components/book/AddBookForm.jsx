@@ -51,7 +51,9 @@ const AddBookForm = () => {
             console.log("Posted data: ", bookData);
             if (res.error) setMsg("Couldn't add book!");
             else setMsg("New book added succesful!");
+            return;
           })
+          .then()
           .catch((err) => {
             console.log(err);
             setMsg("Couldn't add book!");

@@ -1,13 +1,29 @@
 import { Field, Form, Formik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGlobal } from "../../services/context/GlobalContext";
 import { useState } from "react";
+import { useLayoutEffect } from "react";
+import axios from "axios";
 
 export const LoginForm = () => {
-  const { loginRequest } = useGlobal();
+  const { toLogIn } = useGlobal();
+  const navigate = useNavigate();
   const [msg, setMsg] = useState("");
   const handleSubmit = (values) => {
-    loginRequest(values).then((res) => setMsg(res));
+    axios
+      .post("http://localhost:4000/api/users/login", values)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.isLogin) {
+          setMsg("Logged succes!");
+          toLogIn(res.data);
+          navigate("/home");
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setMsg("Wrong login data!");
+      });
   };
 
   const validateEmail = (value) => {
@@ -32,7 +48,7 @@ export const LoginForm = () => {
 
   return (
     <div>
-      <div>{msg}</div>
+      <div className="text-center m-3">{msg}</div>
       <Formik
         initialValues={{
           email: "",

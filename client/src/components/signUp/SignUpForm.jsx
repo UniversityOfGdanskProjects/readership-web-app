@@ -13,6 +13,7 @@ export const SignUpForm = () => {
   const todayDate = new Date();
   const todayDateStr = todayDate.toISOString().slice(0, 10);
   const [msg, setMsg] = useState("");
+  const [msg2, setMsg2] = useState("");
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
@@ -27,7 +28,10 @@ export const SignUpForm = () => {
         dispatch(addUserAction(userData2));
         console.log("Posted data: ", userData2);
         if (res.error) setMsg("E-mail or username already taken.");
-        else setMsg("New account created succesful!");
+        else {
+          setMsg("");
+          setMsg2("Account created succesfuly!");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -39,6 +43,7 @@ export const SignUpForm = () => {
     <div>
       <div className="text-center m-3">
         <div className="text-red-700 font-mono">{msg}</div>
+        <div className="text-emerald-700 font-mono">{msg2}</div>
       </div>
       <Formik
         initialValues={{
@@ -53,7 +58,10 @@ export const SignUpForm = () => {
           comments: [],
           ratings: [],
         }}
-        onSubmit={(values) => handleSubmit(values)}
+        onSubmit={(values, { resetForm }) => {
+          handleSubmit(values);
+          resetForm();
+        }}
         enableReinitialize={true}
       >
         {({ errors, touched }) => (

@@ -2,22 +2,27 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useGlobal } from "../../services/context/GlobalContext";
 import { addShelfAction } from "../../services/actions/ShelfActions";
-import { Link } from "react-router-dom";
 import { Form, Formik, Field } from "formik";
 import { useState } from "react";
 import Shelf from "./Shelf";
+import { updateUserAction } from "../../services/actions/UserActions";
 
-const ShelfNav = ({ shelfs }) => {
-  console.log(Object.keys(shelfs));
-  const books = useSelector((state) => state.books);
+const ShelfNav = () => {
+  const { currentUserID } = useGlobal();
+  const shelfsWithID = useSelector((state) => state.shelfs);
+  console.log(shelfsWithID);
+  const userShelfs = shelfsWithID.filter(
+    (shelfAndId) => shelfAndId.user_id === currentUserID
+  )[0].shelfs;
+  console.log(userShelfs);
+  console.log(Object.keys(userShelfs));
   const [currentShelf, setCurrentShelf] = useState("read");
   const [msg, setMsg] = useState("");
-  const { currentUserID } = useGlobal();
   const dispatch = useDispatch();
 
   const validateShelf = (value) => {
     let error;
-    const anotherShelfs = shelfs[value];
+    const anotherShelfs = userShelfs[value];
     if (anotherShelfs !== undefined) {
       return error;
     }
@@ -28,11 +33,14 @@ const ShelfNav = ({ shelfs }) => {
     console.log("Data to add:", dataToAdd);
     axios
       .patch(`http://localhost:4000/api/users/${currentUserID}`, {
-        shelfs: { ...shelfs, ...dataToAdd },
+        shelfs: { ...userShelfs, ...dataToAdd },
       })
       .then((response) => {
-        console.log("Updated account data: ", currentUserID);
-        dispatch(addShelfAction(dataToAdd));
+        console.log("Updated account data: ", currentUserID, response.data);
+        dispatch(updateUserAction(response.data));
+        dispatch(
+          addShelfAction({ userID: currentUserID, newShelfName: values.shelf })
+        );
         setMsg("Added new shelf!");
       })
       .catch((err) => {
@@ -76,8 +84,8 @@ const ShelfNav = ({ shelfs }) => {
       <div className="flex-col border-b-2 ">
         <h2 className="text-2xl font-medium">Your shelfs: </h2>
         <ul className="flex-col">
-          {console.log(Object.keys(shelfs))}
-          {Object.keys(shelfs).map((shelfName) => {
+          {console.log(Object.keys(userShelfs))}
+          {Object.keys(userShelfs).map((shelfName) => {
             return (
               <li
                 key={shelfName}
@@ -94,7 +102,12 @@ const ShelfNav = ({ shelfs }) => {
           })}
         </ul>
       </div>
-      <Shelf name={currentShelf} key={currentShelf} />
+      <Shelf
+        name={currentShelf}
+        setCurrentShelf={setCurrentShelf}
+        userShelfs={userShelfs}
+        key={currentShelf}
+      />
     </div>
   );
 };

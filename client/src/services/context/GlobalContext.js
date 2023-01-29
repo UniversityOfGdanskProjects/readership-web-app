@@ -1,11 +1,13 @@
 // import * as dotenv from 'dotenv';
 // dotenv.config();
-import axios from "axios";
+
 import { createContext, useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { ShelfsPage } from "../../pages/ShelfsPage";
 
 const GlobalContext = createContext();
+
+
 
 export function useGlobal() {
     return useContext(GlobalContext)
@@ -17,7 +19,8 @@ export function GlobalProvider({ children }) {
     const [currentRole, setcurrentRole] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentUserID, setCurrentUserID] = useState(null);
-    const [currentUserInfo, setCurrentUserInfo] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [currentBook, setCurrentBook] = useState(null);
     
     // const users = useSelector(state => state.users);
 
@@ -25,7 +28,7 @@ export function GlobalProvider({ children }) {
         setIsLoggedIn(false);
         setcurrentRole(null);
         setCurrentUserID(null);
-        setCurrentUserInfo(null)
+        setCurrentUser(null)
         navigate("/");
     };
     
@@ -38,44 +41,38 @@ export function GlobalProvider({ children }) {
         //   role: role, admin/user
         //   token,
         //   }
+        const loginRequest = (values) => {
+            
+           
+        }
+
         const toLogIn = (data) => {
+            setLoading(true);
             if (data.isLogin) {
             setIsLoggedIn(data.isLogin);
             setcurrentRole(data.role);
             if (data.role !=='admin') {
                 setCurrentUserID(data._id);
-                setCurrentUserInfo({
+                setCurrentUser({
+                    _id: data._id,
                     firstName: data.firstName, 
                     lastName: data.lastName, 
-                    dateOfBirth: data.dateOfBirth
+                    dateOfBirth: data.dateOfBirth,
+                    comments: data.comments,
+                    email: data.email,
+                    username: data.username,
+                    shelfs: data.shelfs,
+                    ratings: data.ratings
+
                 });         
             };
+            setLoading(false);
             return true
         }
+        setLoading(false);
         return false
     }
     
-    const loginRequest = async (values) => {
-        axios
-      .post("http://localhost:4000/api/users/login", values)
-      .then((res) => {
-        //  ok response { isLogin: true,
-        //   email: user.email,
-        //   role: role,
-        //   token }
-        console.log(res);
-        if (res.data.isLogin) {
-          toLogIn(res.data);
-          navigate("/home");
-        } else {
-          return("Niepoprawne logowanie!");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        return("Coś poszło nie tak!");
-      });
-    }
 
    
 
@@ -90,8 +87,12 @@ export function GlobalProvider({ children }) {
                 currentUserID,
                 isLoggedIn,
                 currentRole,
-                currentUserInfo,
+                currentUser,
+                setCurrentUser,
                 loginRequest, 
+                currentBook, 
+                setCurrentBook,
+
             }}
         >
             { children }

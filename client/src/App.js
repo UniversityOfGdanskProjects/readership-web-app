@@ -46,10 +46,11 @@ function App() {
       console.log("USERS:", res[3].data)
       const users = res[3].data
       const shelfs = [...users.map(u => {
-        const shelf = {user_id: u._id, shelfs: u.shelfs}
+        const shelf = {user_id: u._id, shelfs: {...u.shelfs}}
         return shelf
       })]
       dispatch(getAllShelfsAction(shelfs));
+      console.log(shelfs);
 
     })
     .catch(err => console.log(err))

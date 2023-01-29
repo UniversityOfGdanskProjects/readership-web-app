@@ -6,5 +6,15 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  daisyui: {
+    themes: false,
+    styled: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    darkTheme: false,
+  },
+  plugins: [require("@tailwindcss/typography"),require("daisyui")]
 }

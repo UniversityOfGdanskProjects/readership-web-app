@@ -8,7 +8,7 @@ import jwt  from 'jsonwebtoken';
 
 
 export const postLoginUser = async (req, res) => {
-
+    console.log(req.body);
     User.findOne({ email: req.body.email })
     .then(user => { 
         logF("USER FOUNDED")
@@ -47,13 +47,17 @@ export const postLoginUser = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 dateOfBirth: user.dateOfBirth,
+                comments: user.comments,
+                username: user.username,
+                shelfs: user.shelfs,
+                ratings: user.ratings,
                 role: role,
                 token,
                 });
         } 
     }).catch((error) => {
         logF("Email or username not found")
-        return res.status(404).json({
+        res.status(404).json({
         message: "Email or username not found",
         error,
         });
@@ -62,7 +66,7 @@ export const postLoginUser = async (req, res) => {
 
 // GET all
 export const getUsers = async (req, res) => {
-    const users = await User.find({email: {$not: /admin@admin.pl/ }}, 
+    const users = await User.find({email: {$not: /admin@ad[.]min/ }}, 
     {username:1, shelfs:1, ratings:1, comments:1, friends:1, email:1, firstName:1, dateOfBirth: 1, lastName: 1}).sort({createdAt: -1});
     logF("GET USERS LIST - getUsers");
     res.status(200).json(users);
@@ -153,7 +157,8 @@ export const updateUser = async (req, res) => {
                 })
             }
         }
-             User.findOneAndUpdate({_id: id}, {...req.body}).then( updateUser => {
+        console.log("Tu");     
+        User.findOneAndUpdate({_id: id}, {...req.body}).then( updateUser => {
                 User.findOne({_id: user._id}).then(userUpdated => {
                     logF('User updated');
                     return res.status(200).json(userUpdated);
