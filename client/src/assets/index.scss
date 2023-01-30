@@ -16,6 +16,10 @@ $main-color: #057a55;
     @apply border p-1;
   }
 
+  h1 {
+    @apply m-10 text-center text-3xl font-bold text-emerald-600;
+  }
+
   .nav-buttons {
     @apply bg-emerald-600  text-white font-bold py-2 px-4;
   }
