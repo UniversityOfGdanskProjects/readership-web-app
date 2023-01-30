@@ -8,7 +8,6 @@ import jwt  from 'jsonwebtoken';
 
 
 export const postLoginUser = async (req, res) => {
-    console.log(req.body);
     User.findOne({ email: req.body.email })
     .then(user => { 
         logF("USER FOUNDED")
@@ -74,6 +73,7 @@ export const getUsers = async (req, res) => {
 
 // GET one
 export const getUser= async (req, res) => {
+    console.log("GET user");
     const { id } = req.params;
     if(!mongoose.Types.ObjectId.isValid(id)) {
         logF("User not found- no ObjectId")
@@ -110,22 +110,30 @@ export const createUser = async (req, res) => {
 
 // DELETE one
 export const deleteUser = async (req, res) => {
+    console.log(req);
+    console.log("DELETING USER..")
+    console.log(req.body);
     const { id } = req.params;
     logF("DELETING USER...")
 
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        logF("USER NOT FOUND - NO OBJECT ID")
-        return res.status(404).json({error: 'User not found- no ObjectId'});
-    };
+    
+    // if(!mongoose.Types.ObjectId.isValid(id)) {
+    //     logF("USER NOT FOUND - NO OBJECT ID")
+    //     return res.status(404).json({error: 'User not found- no ObjectId'});
+    // };
+    
+ 
+        const user = await User.findOneAndDelete({_id: id});
+        
+        if (!user) {
+            return res.status(400).json({ error: "User not found!" });
+          } else {
+            res.status(200).json({userId: id});
+          }
+    
 
-    User.findOneAndDelete({_id: id}).then(result => {
-        logF(`DELETED user ${id}`);
-        return res.status(200).json({id: id});
-    }).catch(err => {
-        logF("COULDN'T DELETED USER")
-        console.log(err);
-        return res.status(404).json({error: err.message});
-    })
+ 
+
     
 }
 
@@ -156,8 +164,7 @@ export const updateUser = async (req, res) => {
                    error: err,
                 })
             }
-        }
-        console.log("Tu");     
+        }    
         User.findOneAndUpdate({_id: id}, {...req.body}).then( updateUser => {
                 User.findOne({_id: user._id}).then(userUpdated => {
                     logF('User updated');

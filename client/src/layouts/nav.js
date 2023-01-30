@@ -6,7 +6,7 @@ export const Navbar = () => {
 
     const adminPanel = (<>
         <li>
-            <Link to="/admin-users-list"className="hover:underline">
+            <Link to="/users-list"className="hover:underline">
                 Users List
             </Link>
         </li>

@@ -17,7 +17,8 @@ export const LoginForm = () => {
         if (res.data.isLogin) {
           setMsg("Logged succes!");
           toLogIn(res.data);
-          navigate("/home");
+          if (res.data.role === "admin") navigate("/users-list");
+          else navigate("/home");
         }
       })
       .catch((err) => {
