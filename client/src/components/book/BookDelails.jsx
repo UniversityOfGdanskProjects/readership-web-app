@@ -5,7 +5,6 @@ import { updateShelfAction } from "../../services/actions/ShelfActions";
 import Rating from "./Rating";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { deleteBookAction } from "../../services/actions/BookActions";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import { updateUserAction } from "../../services/actions/UserActions";
@@ -101,6 +100,10 @@ export const BookDetails = ({ book, bookAuthors }) => {
       navigate("/home");
     });
     setLoading(false);
+  };
+
+  const handleUpdate = () => {
+    console.log("Admin want to update a book ", book._id);
   };
 
   const handleReadButton = () => {
@@ -217,10 +220,16 @@ export const BookDetails = ({ book, bookAuthors }) => {
                 <div className="flex">
                   {currentRole === "admin" ? (
                     <>
-                      <button className="flex ml-auto all-buttons">
+                      <button
+                        className="flex ml-auto all-buttons"
+                        onClick={handleDelete}
+                      >
                         Delete book
                       </button>
-                      <button className="flex ml-0 all-buttons">
+                      <button
+                        className="flex ml-0 all-buttons"
+                        onClick={handleUpdate}
+                      >
                         Update book
                       </button>
                     </>
@@ -234,7 +243,10 @@ export const BookDetails = ({ book, bookAuthors }) => {
                           {readButtonMsg}
                         </button>
                       </div>
-                      <div className="dropdown dropdown-top">
+                      <div
+                        className=" dropdown dropdown-top tooltip hover:tooltip-open tooltip-right"
+                        data-tip={`Click to add/remove from shelf`}
+                      >
                         <label
                           tabIndex={0}
                           className=" all-buttons "
@@ -247,7 +259,7 @@ export const BookDetails = ({ book, bookAuthors }) => {
                             }
                           }}
                         >
-                          Add to shelf
+                          On shelfs
                         </label>
                         {Object.keys(userShelfs).length === 1 ? (
                           <></>
@@ -290,13 +302,14 @@ export const BookDetails = ({ book, bookAuthors }) => {
                                         </span>
                                       </li>
                                     ) : (
-                                      <button
+                                      <li
+                                        className="mr-2 mt-0.5 p-2.5 hover:cursor-pointer rounded-lg hover:bg-green-400"
                                         onClick={() => {
                                           addToShelf(shelfName);
                                         }}
                                       >
-                                        <li>{shelfName}</li>
-                                      </button>
+                                        {shelfName}
+                                      </li>
                                     )}
                                   </div>
                                 );

@@ -11,15 +11,18 @@ import {
 const AccountSettings = () => {
   const { currentUserID, currentUser, toLogOut } = useGlobal();
   const users = useSelector((state) => state.users);
-  const user = users.filter((user) => user._id === currentUserID)[0];
   const otherUsers = users.filter((user) => user._id !== currentUserID);
   const [msg, setMsg] = useState("");
 
   const handleSubmit = (values) => {
-    const duplicatedMailOrUsername = otherUsers.filter((user) => {
-      if (user.email === values.email || user.username === values.username) {
-        return;
+    const duplicatedMailOrUsername = otherUsers.filter((otherUser) => {
+      if (
+        otherUser.email === values.email ||
+        otherUser.username === values.username
+      ) {
+        return true;
       }
+      return false;
     });
     console.log(duplicatedMailOrUsername);
     if (duplicatedMailOrUsername.length === 0) {

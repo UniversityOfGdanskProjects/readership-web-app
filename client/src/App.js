@@ -1,4 +1,4 @@
-import {  Routes, Route, BrowserRouter } from 'react-router-dom'
+import {  Routes, Route } from 'react-router-dom'
 import axios from 'axios';
 import { useEffect } from 'react';
 import {useDispatch, } from 'react-redux';
@@ -21,11 +21,12 @@ import { getAllUsersAction } from './services/actions/UserActions';
 import { getAllShelfsAction } from './services/actions/ShelfActions';
 import { SearchBooksPage } from './pages/SearchBooks';
 import { AddBookPage } from './pages/AddBookPage';
-import Shelf from './components/shelfs/Shelf';
+import {UsersListPage} from './pages/UsersListPage'
+
 
 function App() {
   const dispatch = useDispatch(); // zrobić store'a
-  const {currentRole} =useGlobal();
+  const { currentRole } = useGlobal();
 
   useEffect(() => {
 
@@ -66,16 +67,16 @@ function App() {
           <Route path="/sign-up" element={ <SignUpPage /> }/>
           {currentRole === null ? "" :
           <>
-          <Route path="/home" element={ <HomePage /> }/>
           <Route path="/find-book" element={ <SearchBooksPage /> }/>
           <Route path="/book/:id" element={ <BookPage /> }/>
           {currentRole === "admin" ?
           <>
-          <Route path="/home" element={ <HomePage /> }/>
           <Route path="/add-book" element={ <AddBookPage /> }/>
+          <Route path="/users-list" element={ <UsersListPage /> }/>
           </>
           :
           <>
+          <Route path="/home" element={ <HomePage /> }/>
           <Route path="/account-settings" element={ <AccountSettingsPage /> }/>
           <Route path="/shelfs" element={ <ShelfsPage /> }/>
 

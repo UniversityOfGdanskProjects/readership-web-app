@@ -7,7 +7,7 @@ export const Navbar = () => {
     const adminPanel = (<>
         <li>
             <Link to="/admin-users-list"className="hover:underline">
-                Users
+                Users List
             </Link>
         </li>
         <li>
@@ -24,7 +24,11 @@ export const Navbar = () => {
 
     const userProfile = (
     <>
-
+    <li>
+        <Link to="/home" className="hover:underline">
+            Home
+        </Link>
+    </li>
         <li>
             <Link to="/account-settings" className="hover:underline">
                 Account
@@ -45,11 +49,7 @@ export const Navbar = () => {
 
     const navLinks = 
     <ul className="flex flex-row mt-0 mr-6 space-x-8 text-lg font-medium">
-    <li>
-        <Link to="/home" className="hover:underline">
-            Home
-        </Link>
-    </li>
+
         {currentRole==="admin" ? adminPanel : userProfile}        
     </ul>
 

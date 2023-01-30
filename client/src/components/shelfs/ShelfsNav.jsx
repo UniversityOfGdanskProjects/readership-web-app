@@ -13,11 +13,14 @@ import Swal from "sweetalert2/src/sweetalert2.js";
 
 const ShelfNav = () => {
   const { currentUserID } = useGlobal();
-  const shelfsWithID = useSelector((state) => state.shelfs);
-  console.log(shelfsWithID);
-  const userShelfs = shelfsWithID.filter(
-    (shelfAndId) => shelfAndId.user_id === currentUserID
-  )[0].shelfs;
+  const userShelfs = useSelector((state) => {
+    const shelfs = state.shelfs;
+    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0][
+      "shelfs"
+    ];
+    console.log("Returning userShelfs state...", userShelfs);
+    return userShelfs;
+  });
   console.log(userShelfs);
   console.log(Object.keys(userShelfs));
   const [currentShelf, setCurrentShelf] = useState("read");
@@ -62,7 +65,9 @@ const ShelfNav = () => {
           .catch((err) => {
             console.log(err);
           });
-        Swal.fire("", `Shelf: "${shelfName}" has removed`);
+        Swal.fire("", `Shelf: "${shelfName}" has removed`).then((res) => {
+          if (currentShelf === shelfName) setCurrentShelf("read");
+        });
       }
     });
   };
@@ -99,8 +104,8 @@ const ShelfNav = () => {
       });
   };
   return (
-    <div className="flex-col ml-5">
-      <div className="flex-column align-baseline m-5">
+    <div className="grid grid-col-4  grid-rows-8 ml-5">
+      <div className=" col-span-1 row-span-1 row-start-1 col-start-1 flex-column align-baseline m-5">
         <div className="text-2xl font-medium">Add new shelf: </div>
         <Formik
           initialValues={{
@@ -133,7 +138,7 @@ const ShelfNav = () => {
           )}
         </Formik>
       </div>
-      <div className="flex-col border-b-2 ">
+      <div className="col-start-1 row-start-2  m-5">
         <h2 className="text-2xl font-medium">Your shelfs: </h2>
         <ul className="flex-col">
           {console.log(Object.keys(userShelfs))}
@@ -168,7 +173,7 @@ const ShelfNav = () => {
                   ""
                 )}
                 <button
-                  className="hover:underline"
+                  className="hover:underline active:underline focus:underline"
                   onClick={() => setCurrentShelf(shelfName)}
                 >
                   {shelfName}
@@ -178,12 +183,14 @@ const ShelfNav = () => {
           })}
         </ul>
       </div>
-      {/* <Shelf
-        name={currentShelf}
-        setCurrentShelf={setCurrentShelf}
-        userShelfs={userShelfs}
-        key={currentShelf}
-      /> */}
+      <div className="col-span-3 row-span-4 col-start-3">
+        <Shelf
+          name={currentShelf}
+          setCurrentShelf={setCurrentShelf}
+          userShelfs={userShelfs}
+          key={currentShelf}
+        />
+      </div>
     </div>
   );
 };

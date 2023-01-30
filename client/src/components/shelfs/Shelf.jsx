@@ -3,18 +3,9 @@ import { useGlobal } from "../../services/context/GlobalContext";
 import BookCard from "../book/BookCard";
 import { useEffect } from "react";
 
-const Shelf = ({ name }) => {
+const Shelf = ({ name, setCurrentShelf, userShelfs }) => {
   const { currentUserID, loading, setLoading } = useGlobal();
   const books = useSelector((state) => state.books);
-  const authors = useSelector((state) => state.authors);
-  const userShelfs = useSelector((state) => {
-    const shelfs = state.shelfs;
-    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0][
-      "shelfs"
-    ];
-    console.log("Returning userShelfs state...", userShelfs);
-    return userShelfs;
-  });
 
   // bookTitle: [authors]
   const booksOnShelf = userShelfs[name].map((bookID) => {
@@ -22,18 +13,10 @@ const Shelf = ({ name }) => {
   });
 
   return (
-    <div className="  m-10 text-center text-3xl font-bold text-emerald-600">
+    <div className="flex-column  m-10 text-center text-3xl font-bold text-emerald-600">
       <h1>"{name}" shelf</h1>
       {booksOnShelf.map((book) => {
-        const bookAuthors = authors.map((author) =>
-          book.author.map((bookAuthor) => {
-            return author._id === bookAuthor ? author.fullName : "";
-          })
-        );
-
-        return (
-          <BookCard key={book._id} book={book} bookAuthors={bookAuthors} />
-        );
+        return <BookCard key={book._id} book={book} />;
       })}
     </div>
   );

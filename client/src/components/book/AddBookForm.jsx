@@ -15,12 +15,13 @@ const AddBookForm = () => {
 
   const handleSubmit = (values) => {
     console.log(values);
-    const authorsToCreate = values.author.map((a) => {
-      authors.filter((eAuthor) => {
+    const authorsToCreate = values.author.filter((a) => {
+      const sameAuthorsList = authors.filter((eAuthor) => {
         if (eAuthor.fullName === a.fullName) {
-          return false;
-        } else return true;
+          return true;
+        } else return false;
       });
+      return sameAuthorsList.length === 0;
     });
     let promises = [];
     let authorsId = [];
