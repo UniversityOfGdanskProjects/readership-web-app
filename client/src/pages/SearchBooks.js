@@ -51,7 +51,7 @@ export const SearchBooksPage = () => {
         </Formik>
     </div>
 
-        {results!==null? results : books.map(book => <BookCard book={book} key={book._id}/>)}
+        {results.length!==0? results : books.map(book => <BookCard book={book} key={book._id}/>)}
         
     </div> );
 };

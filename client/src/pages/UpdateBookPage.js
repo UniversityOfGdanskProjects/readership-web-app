@@ -57,7 +57,7 @@ const UpdateBookPage = () => {
         .then((resAuthors) => {
           const bookData = { ...values, author: authorsId };
           axios
-            .post("http://localhost:4000/api/books", bookData)
+            .patch("http://localhost:4000/api/books", bookData)
             .then((response) => {
               const res = response.data;
               dispatch(addBookAction(res));
@@ -88,12 +88,13 @@ const UpdateBookPage = () => {
         </div>
         <Formik
           initialValues={{
-            title: "",
-            author: [
-              {
-                fullName: "",
-              },
-            ],
+            title: book.title,
+            author: 
+              book.author.map(a=>{
+                const bookAuthorInfo = authors.filter(eAuthor => eAuthor.Author._id===a)[0] //[{fullName: ... _id: ..}, ....]
+                return bookAuthorInfo.fullName
+              })
+            ,
             description: "",
             publicationDate: "",
             language: "",
@@ -183,6 +184,7 @@ const UpdateBookPage = () => {
                 name="publicationDate"
                 type="date"
                 max={todayDateStr}
+                placeholder={book.publicationDate}
                 required
               />
               <button type="submit" className="all-buttons">
