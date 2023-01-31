@@ -5,14 +5,9 @@ import { Book } from './booksModel.js'
 export const authorSchema = new Schema({
     fullName: {
         type: String,
-        require: true
+        required: true
     }, 
-    books: [
-        { 
-            type: Schema.Types.ObjectId, 
-            ref: 'Book' 
-        }
-    ],
+    
     photo: String,
     
 }, { timestamps: true });

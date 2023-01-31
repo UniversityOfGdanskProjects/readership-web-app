@@ -9,19 +9,21 @@ export const commentSchema = new Schema({
     book: {
         type: Schema.Types.ObjectId,
         // ref: bookSchema,
-        require: true
+        required: true
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        require: true
+        required: true
     },
     body: {
         type: String
     },
-    rating: {
-        type: Number
-    },
+    date: {
+        type: Date,
+        required: true
+    }
+
 
     
 }, { timestamps: true, collection: "comments" });

@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 export const bookSchema = new Schema({
     title: {
         type: String,
-        require: true
+        required: true
     }, 
     author: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -24,14 +24,14 @@ export const bookSchema = new Schema({
     },
     publicationDate: {
         type: Date,
-        require: true
+        required: true
     },
     publisher: {
         type: String
     },
     language: {
         type: String,
-        require: true
+        required: true
     },
     comments: [
         { 
@@ -39,9 +39,9 @@ export const bookSchema = new Schema({
            ref: 'Comment'
        }
    ],
-   rating: {
-       'counter' : {type: Number, default: 0},
-       'mean': {type: Number, default: 0}
+
+   stats: {
+        type: Object
    },
    
     photo_src: String

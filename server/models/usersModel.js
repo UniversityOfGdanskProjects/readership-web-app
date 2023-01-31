@@ -42,21 +42,7 @@ export const userSchema = new Schema({
         
         // { type: Schema.Types.ObjectId, 
         // ref: 'Book'}
-    },
-    comments: [
-        { 
-           type: Schema.Types.ObjectId, 
-           ref: 'Comment'
-       }
-   ],
-   ratings: [
-            [{ 
-                type: Schema.Types.ObjectId, 
-                ref: 'Book'
-            }, {
-                type: Number
-            }]
-   ],
+    }
     
 }, { timestamps: true, collection: "users", minimize:false});
 

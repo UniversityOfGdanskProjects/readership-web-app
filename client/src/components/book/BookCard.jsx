@@ -12,14 +12,18 @@ const BookCard = ({ book }) => {
 
   return (
     <div key={book._id} className="flex justify-center m-2">
-      <Link to={`/book/${book._id}`}>
-        <div className="flex  flex-row max-w-xl rounded-lg bg-white shadow-lg">
+      <Link to={`/book/${book._id}`} className="">
+        <div className="flex  flex-row max-w-xl min-w-min rounded-lg bg-white shadow-lg">
           <img
-            className=" h-auto object-cover w-48 rounded-t-lg rounded-none rounded-l-lg"
-            src={book.photo_src}
+            className=" object-cover w-48 rounded-t-lg rounded-none rounded-l-lg"
+            src={
+              book.photo_src === ""
+                ? "https://ucarecdn.com/020a04b5-181c-42f8-885c-c30ec5367374/istockphoto701079854612x612.jpg"
+                : book.photo_src
+            }
             alt=""
           />
-          <div className="p-6 flex flex-col justify-start">
+          <div className="p-6 flex flex-col justify-start w-96 h-72">
             <h5 className="text-gray-900 text-xl font-medium mb-2">
               {book.title}
             </h5>

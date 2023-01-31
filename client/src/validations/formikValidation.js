@@ -18,3 +18,11 @@ export const validateEmail = (value) => {
     }
     return error;
   };
+
+  export const validateLink = (value) => {
+    let error;
+    if (!/^((http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg)))$|^$/.test(value)) {
+      error="Not photo link. You can add it later - it's not required."
+    }
+    return error;
+  }
