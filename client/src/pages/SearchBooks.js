@@ -6,6 +6,7 @@ import BookCard from '../components/book/BookCard';
 
 export const SearchBooksPage = () => {
     const authors = useSelector((state) => state.authors);
+    const books = useSelector(state => state.books);
     const [searched, setSearched] = useState([]);
     const handleSearch = (values) => {
         axios.get(`http://localhost:4000/api/books/search/${values.search}`).then(
@@ -18,6 +19,7 @@ export const SearchBooksPage = () => {
     };
 
     const results = searched.map(book => {
+
         const bookAuthors = authors.map((author) =>
         book.author.map((bookAuthor) => {
             return author._id === bookAuthor ? author.fullName : "";
@@ -25,6 +27,8 @@ export const SearchBooksPage = () => {
         );
         return <BookCard book={book} key={book._id} bookAuthors={bookAuthors}/>
     });
+
+    console.log("Results", results);
 
     return ( <div>
     <div className="relative">
@@ -47,7 +51,7 @@ export const SearchBooksPage = () => {
         </Formik>
     </div>
 
-        {results}
+        {results!==null? results : books.map(book => <BookCard book={book} key={book._id}/>)}
         
     </div> );
 };

@@ -62,7 +62,8 @@ function App() {
     <div className=''>
         <Header />
         <Navbar />
-        <Routes>
+        <div className="mb-16">
+        <Routes >
           <Route path="/" element={ <LoginPage /> }/>
           <Route path="/sign-up" element={ <SignUpPage /> }/>
           {currentRole === null ? "" :
@@ -86,6 +87,7 @@ function App() {
         }
           <Route path="*" element={ <NotFoundPage /> }/>
         </Routes>
+        </div>
         <Footer />
     </div>
   );
