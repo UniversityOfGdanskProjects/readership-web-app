@@ -10,15 +10,16 @@ import Comments from "./Comment";
 import { AddComment } from "./AddComment";
 
 const BookDetailsUserPanel = ({ book }) => {
-  const { currentUserID, setLoading } = useGlobal();
+  const { currentUserID, setLoading, loading } = useGlobal();
   const dispatch = useDispatch();
 
   const userShelfs = useSelector((state) => {
-    const userShelfs = state.shelfs.filter(
+
+    return state.shelfs.filter(
       (s) => s.user_id === currentUserID
     )[0]["shelfs"];
-    console.log("Returning userShelfs state...", userShelfs);
-    return userShelfs;
+    
+    
   });
 
   const [isRead, setIsRead] = useState(
@@ -158,7 +159,10 @@ const BookDetailsUserPanel = ({ book }) => {
     setLoading(false);
   };
 
-  return (
+  return ( <div>
+
+    {
+      loading ? "Loading..." : 
     <div className="flex-column">
       <div className="flex items-center gap-x-5 m-3">
         <div>
@@ -240,6 +244,8 @@ const BookDetailsUserPanel = ({ book }) => {
       </div>
       <AddComment book={book} />
     </div>
+    }
+  </div>
   );
 };
 

@@ -19,7 +19,7 @@ const Comments = ({ book }) => {
           axios
             .delete(`http://localhost:4000/api/comments/${id}`)
             .then((response) => {
-              dispatch(deleteCommentAction(response.data._id));
+              dispatch(deleteCommentAction(response.data));
               Swal.fire("Comment has been deleted");
             })
             .catch((err) => console.log(err));
@@ -30,7 +30,7 @@ const Comments = ({ book }) => {
   return (
     <div>
       <h1 className="text-xl mt-2 mb-8">Comments ( {comments.length} )</h1>
-      {comments.map((c) => {
+      {comments.sort((a,b) => b.date - a.date).map((c) => {
         const user = users.filter((u) => u._id === c.user)[0];
         return (
           <div
@@ -42,7 +42,7 @@ const Comments = ({ book }) => {
             <div className="text-base m-2 w-3/4 p-3 rounded">{c.body}</div>
             {user._id === currentUserID || currentRole === "admin" ? (
               <button
-                onClick={() => deleteComment(user._id)}
+                onClick={() => deleteComment(c._id)}
                 className="all-buttons text-sm"
               >
                 Delete comment

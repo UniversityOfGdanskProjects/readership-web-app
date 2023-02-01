@@ -29,7 +29,7 @@ export const AddComment = ({ book }) => {
           book: book._id,
           date: todayDateStr,
         }}
-        onSubmit={(values) => hanldeSubmit(values)}
+        onSubmit={(values, {resetForm}) =>{ hanldeSubmit(values); resetForm()}}
       >
         <Form>
           <Field

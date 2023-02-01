@@ -2,17 +2,27 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import Swal from "sweetalert2/src/sweetalert2.js";
 import {deleteUserAction} from '../services/actions/UserActions'
+import {deleteCommentAction} from '../services/actions/CommentActions'
 
 
 
 export const UsersListPage = () => {
     const dispatch = useDispatch();
     const users = useSelector((state) => state.users);
+    const comments = useSelector((state) => state.comments);
         
     const deleteUser = (id, username) => {
-        Swal.fire({title:`Delete user "${username}" ?`, showCancelButton: true, confirmButtonText: 'Delete'}).then(result => {
-            if (result.isConfirmed) {
-                axios.delete(`http://localhost:4000/api/users/${id}` ).then(res=>{
+      Swal.fire({title:`Delete user "${username}" ?`, showCancelButton: true, confirmButtonText: 'Delete'}).then(result => {
+        if (result.isConfirmed) {
+          let promises = []
+              const userComments = comments.filter( c => c.user === id).forEach(c => promises.push(axios.delete(`http://localhost:4000/api/comments/${c._id}`).then(res => {
+                dispatch(deleteCommentAction(c))
+                console.log(comments);
+
+              }).catch(err => console.log(err))));
+              const p1 =  axios.delete(`http://localhost:4000/api/users/${id}` )
+              Promise.all([...promises, p1])
+              .then(res=>{
                     dispatch(deleteUserAction(id))
                     Swal.fire(`Deleted user ${username}`)
                 }).catch(err => {

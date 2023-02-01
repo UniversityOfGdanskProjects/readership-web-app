@@ -2,12 +2,15 @@ import { Field, Form, Formik } from "formik";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+
 import {
   validateEmail,
   validatePassword,
 } from "../../validations/formikValidation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUserAction } from "../../services/actions/UserActions";
+import { getAllShelfsAction } from "../../services/actions/ShelfActions";
+
 
 export const SignUpForm = () => {
   const todayDate = new Date();
@@ -15,6 +18,8 @@ export const SignUpForm = () => {
   const [msg, setMsg] = useState("");
   const [msg2, setMsg2] = useState("");
   const dispatch = useDispatch();
+  const users = useSelector(state => state.users);
+
 
   const handleSubmit = (values) => {
     axios
@@ -26,6 +31,12 @@ export const SignUpForm = () => {
         delete userData.terms;
         const userData2 = { ...userData, _id: response.data._id };
         dispatch(addUserAction(userData2));
+        const shelfs = [...users.map(u => {
+          const shelf = {user_id: u._id, shelfs: {...u.shelfs}}
+          return shelf
+        })]
+        dispatch(getAllShelfsAction(shelfs));
+        console.log(shelfs);
         console.log("Posted data: ", userData2);
         if (res.error) setMsg("E-mail or username already taken.");
         else {
