@@ -29,11 +29,15 @@ export const validateEmail = (value) => {
 
   export const validateNoSpace = (value) => {
     let error;
-    if(/^\s*$/.test(value)) {
+    if(!/^[a-zA-Z]+$/.test(value)) {
+      error="Letters only"
+    } 
+    if(/\s+/.test(value)) {
       error="Remove spaces"
-    }
+    } 
     if(/^$/.test(value)) {
       error="Required"
-    }
+    } 
+
     return error;
   }
