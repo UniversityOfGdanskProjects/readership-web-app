@@ -6,7 +6,7 @@ import {
   deleteShelfAction,
 } from "../../services/actions/ShelfActions";
 import { Form, Formik, Field } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Shelf from "./Shelf";
 import { updateUserAction } from "../../services/actions/UserActions";
 import Swal from "sweetalert2/src/sweetalert2.js";
@@ -14,17 +14,23 @@ import Swal from "sweetalert2/src/sweetalert2.js";
 const ShelfNav = () => {
   const { currentUserID } = useGlobal();
   const userShelfs = useSelector((state) => {
-    const shelfs = state.shelfs;
-    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0].shelfs;
-    console.log("Returning userShelfs state...", userShelfs);
-    return userShelfs;
+    return state.shelfs.filter((s) => s.user_id === currentUserID)[0].shelfs
   });
-  console.log(userShelfs);
-  console.log(Object.keys(userShelfs));
+
+  const [shelfsKeys, setShelfsKeys] = useState([]);
   const [currentShelf, setCurrentShelf] = useState("read");
   const dispatch = useDispatch();
 
+  
+
+  useEffect(() => {
+    setShelfsKeys(Object.keys(userShelfs));
+    console.log("New keys")
+  }, [userShelfs, currentShelf]);
+  
+
   const validateShelf = (value) => {
+    
     let error;
     const anotherShelfs = userShelfs[value];
     if (anotherShelfs !== undefined) {
@@ -36,6 +42,7 @@ const ShelfNav = () => {
   };
 
   const deleteShelf = (shelfName) => {
+    
     Swal.fire({
       title: `Remove "${shelfName}" shelf?`,
       showCancelButton: true,
@@ -43,29 +50,27 @@ const ShelfNav = () => {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        const tmp = userShelfs[shelfName];
+        const tmp = userShelfs;
         delete tmp[shelfName];
+        console.log("TMP:", tmp)
         const dataToUpdate = { shelfs: tmp };
+        console.log("Data to update", dataToUpdate);
+        dispatch(deleteShelfAction({
+            user_id: currentUserID,
+            delShelfName: shelfName
+          }));
         axios
-          .patch(`http://localhost:4000/api/users/${currentUserID}`, {
-            shelfs: { ...userShelfs, ...dataToUpdate },
-          })
+          .patch(`http://localhost:4000/api/users/${currentUserID}`, dataToUpdate)
           .then((res) => {
             console.log("Updated account data: ", currentUserID, res.data);
+            console.log("Updated account data, userShelfs: ", userShelfs);
             dispatch(updateUserAction(res.data));
-            dispatch(
-              deleteShelfAction({
-                user_id: currentUserID,
-                delShelfName: shelfName,
-              })
-            );
           })
           .catch((err) => {
             console.log(err);
           });
-        Swal.fire("", `Shelf: "${shelfName}" has removed`).then((res) => {
-          if (currentShelf === shelfName) setCurrentShelf("read");
-        });
+          setCurrentShelf("read")
+        Swal.fire("", `Shelf: "${shelfName}" has removed`);
       }
     });
   };
@@ -89,7 +94,8 @@ const ShelfNav = () => {
             user_id: currentUserID,
             newShelfName: values.newShelfName,
           })
-        );
+          );
+          console.log("After add in ShelfNav:", userShelfs);
         Swal.fire({
           title: "Added new shelf",
         });
@@ -140,7 +146,7 @@ const ShelfNav = () => {
         <h2 className="text-2xl font-medium">Your shelfs: </h2>
         <ul className="flex-col">
           {console.log(Object.keys(userShelfs))}
-          {Object.keys(userShelfs).map((shelfName) => {
+          {shelfsKeys.map((shelfName) => {
             return (
               <li
                 key={shelfName}
@@ -149,7 +155,10 @@ const ShelfNav = () => {
                 {shelfName !== "read" ? (
                   <button
                     className="hover:bg-red-700 bg-red-300 text-white mr-2 mt-0.5 rounded"
-                    onClick={() => deleteShelf(shelfName)}
+                    onClick={() => {
+                      setCurrentShelf(shelfName);
+                      deleteShelf(shelfName);
+                    }}
                   >
                     <svg
                       className="h-4 w-4"

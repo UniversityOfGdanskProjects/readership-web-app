@@ -27,13 +27,13 @@ export const ShelfReducer = (state=initialState, action) => {
             const addShelfState = state.map(UIDAndShelfs => {
                 console.log("UIDSHELF", UIDAndShelfs)
                 if (UIDAndShelfs.user_id === action.payload.user_id ) {
-                    console.log("USER:", UIDAndShelfs)
                     if (UIDAndShelfs.shelfs[action.payload.newShelfName] === undefined) {
-                        console.log("NEW SHLEF:", UIDAndShelfs)
-                        return {...UIDAndShelfs, shelfs: {...UIDAndShelfs['shelfs'], [action.payload.newShelfName]: []}}
+                        const tmp = {...UIDAndShelfs, shelfs: {...UIDAndShelfs['shelfs'], [action.payload.newShelfName]: []}}
+                        console.log("OLD SHLEFS:", UIDAndShelfs);
+                        console.log("NEW SHLEFS TMP:", tmp);
+                        return tmp;
                     } else {
                         console.log("Shelf exists")
-                        return UIDAndShelfs
                     }
                 } 
                 return UIDAndShelfs
@@ -42,6 +42,8 @@ export const ShelfReducer = (state=initialState, action) => {
             return addShelfState
         case DELETE_SHELF:
             console.log('ACTION: ', action.type);
+            console.log('DELETING SHELF STATE: ', state);
+            console.log('SHELF TO DELETE: ', state);
             // action.paylood = {
             //     user_id: currentUserID,
             //     delShelfName: "delShelfName"
