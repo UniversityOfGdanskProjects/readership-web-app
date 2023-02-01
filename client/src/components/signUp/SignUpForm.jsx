@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   validateEmail,
   validatePassword,
+  validateNoSpace
 } from "../../validations/formikValidation";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserAction } from "../../services/actions/UserActions";
@@ -80,20 +81,32 @@ export const SignUpForm = () => {
               name="username"
               type="text"
               placeholder="username"
+              validate={validateNoSpace}
               required
             />
+                          {errors.username && touched.username && (
+                <div className="text-red-700">{errors.username}</div>
+              )}
             <Field
               name="firstName"
               type="text"
               placeholder="firstname"
+              validate={validateNoSpace}
               required
-            />
+              />
+              {errors.firstName && touched.firstName && (
+                <div className="text-red-700">{errors.firstName}</div>
+              )}
             <Field
               name="lastName"
               type="text"
               placeholder="lastname"
+              validate={validateNoSpace}
               required
-            />
+              />
+              {errors.lastName && touched.lastName && (
+                <div className="text-red-700">{errors.lastName}</div>
+              )}
             <Field
               name="email"
               type="text"

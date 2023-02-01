@@ -26,3 +26,14 @@ export const validateEmail = (value) => {
     }
     return error;
   }
+
+  export const validateNoSpace = (value) => {
+    let error;
+    if(/^\s*$/.test(value)) {
+      error="Remove spaces"
+    }
+    if(/^$/.test(value)) {
+      error="Required"
+    }
+    return error;
+  }
