@@ -15,9 +15,7 @@ const ShelfNav = () => {
   const { currentUserID } = useGlobal();
   const userShelfs = useSelector((state) => {
     const shelfs = state.shelfs;
-    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0][
-      "shelfs"
-    ];
+    const userShelfs = shelfs.filter((s) => s.user_id === currentUserID)[0].shelfs;
     console.log("Returning userShelfs state...", userShelfs);
     return userShelfs;
   });
@@ -45,7 +43,7 @@ const ShelfNav = () => {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        const tmp = shelfName;
+        const tmp = userShelfs[shelfName];
         delete tmp[shelfName];
         const dataToUpdate = { shelfs: tmp };
         axios
