@@ -165,6 +165,7 @@ export const updateUser = async (req, res) => {
                 })
             }
         }    
+        delete req.body.password
         User.findOneAndUpdate({_id: id}, {...req.body}).then( updateUser => {
                 User.findOne({_id: user._id}).then(userUpdated => {
                     logF('User updated');

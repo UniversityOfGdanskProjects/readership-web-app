@@ -4,7 +4,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { deleteBookAction } from "../../services/actions/BookActions";
 import Swal from "sweetalert2/src/sweetalert2.js";
-import Comments from "./Comment";
 
 const BookDelailsAdminPanel = ({ book }) => {
   const { setLoading } = useGlobal();

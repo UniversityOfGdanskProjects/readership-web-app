@@ -36,7 +36,7 @@ export const Navbar = () => {
         </li>
         <li>
             <Link to="/shelfs" className="hover:underline">
-                Shelfs
+                Shelves
             </Link>
         </li>
         <li>

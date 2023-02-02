@@ -21,6 +21,21 @@ const ShelfNav = () => {
   const [currentShelf, setCurrentShelf] = useState("read");
   const dispatch = useDispatch();
 
+  const delButton = ( <svg
+    className="h-4 w-4"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>)
   
 
   useEffect(() => {
@@ -143,7 +158,7 @@ const ShelfNav = () => {
         </Formik>
       </div>
       <div className="col-start-1 row-start-2  m-5">
-        <h2 className="text-2xl font-medium">Your shelfs: </h2>
+        <h2 className="text-2xl font-medium">Your shelves: </h2>
         <ul className="flex-col">
           {console.log(Object.keys(userShelfs))}
           {shelfsKeys.map((shelfName) => {
@@ -152,7 +167,7 @@ const ShelfNav = () => {
                 key={shelfName}
                 className="hover:underline text-xl font-medium ml-5"
               >
-                {shelfName !== "read" ? (
+                {shelfName !== "read" && shelfName !== "want to read"? (
                   <button
                     className="hover:bg-red-700 bg-red-300 text-white mr-2 mt-0.5 rounded"
                     onClick={() => {
@@ -160,21 +175,7 @@ const ShelfNav = () => {
                       deleteShelf(shelfName);
                     }}
                   >
-                    <svg
-                      className="h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                    {delButton}
                   </button>
                 ) : (
                   ""

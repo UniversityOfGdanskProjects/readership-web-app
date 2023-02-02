@@ -38,7 +38,7 @@ export const userSchema = new Schema({
     },
     shelfs: { // empty or [want to read, currently reading, read, ..to create by user]
         type: Object,
-        default: {shelfs: {"read":[]}} 
+        default: {shelfs: {"read":[], "want to read": []}} 
         
         // { type: Schema.Types.ObjectId, 
         // ref: 'Book'}

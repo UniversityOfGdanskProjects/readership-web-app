@@ -7,6 +7,7 @@ import {
   validateEmail,
   validatePassword,
 } from "../../validations/formikValidation";
+import Swal from "sweetalert2/src/sweetalert2.js";
 
 const AccountSettings = () => {
   const { currentUserID, currentUser, toLogOut } = useGlobal();
@@ -45,16 +46,21 @@ const AccountSettings = () => {
 
   const deleteAccount = () => {
     console.log("Want to delete account");
-    axios
-      .delete(`http://localhost:4000/api/users/${currentUserID}`)
-      .then((res) => {
-        console.log("Account deleted");
-        toLogOut();
-      })
-      .catch((err) => {
-        console.log(err);
-        setMsg("Cannot delete account");
-      });
+    Swal.fire({title: "Delete account?", confirmButtonText: "Yes, delete it!", showCancelButton: true, cancelButtonColor: '#d33',}).then(res => {
+      if(res.isConfirmed) {
+        axios
+          .delete(`http://localhost:4000/api/users/${currentUserID}`)
+          .then((res) => {
+            console.log("Account deleted");
+            toLogOut();
+          })
+          .catch((err) => {
+            console.log(err);
+            setMsg("Cannot delete account");
+          });
+
+      }
+    })
   };
 
   return (

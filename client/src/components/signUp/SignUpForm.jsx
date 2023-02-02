@@ -67,7 +67,7 @@ export const SignUpForm = () => {
           dateOfBirth: "",
           password: "",
           terms: false,
-          shelfs: { read: [] },
+          shelfs: { read: [], "want to read": [] },
         }}
         onSubmit={(values, { resetForm }) => {
           handleSubmit(values);
