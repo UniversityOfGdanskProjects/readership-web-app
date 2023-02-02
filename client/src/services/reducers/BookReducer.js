@@ -18,10 +18,10 @@ export const BookReducer = (state=initialState, action) => {
             return [...state.filter(el => el._id !== action.payload._id)]
         case UPDATE_BOOK:
             console.log('ACTION: ', action.type);
-            // TODO: create option to update
+            
             const newState = [...state.map(el => {
                 if (el._id === action.payload._id) {
-                    return action.payload
+                    return {...el,...action.payload}
                 } else return el
             })]
             return newState

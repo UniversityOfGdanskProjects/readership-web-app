@@ -3,21 +3,22 @@ import axios from "axios";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addBookAction } from "../../services/actions/BookActions";
-import { addAuthorAction } from "../../services/actions/AuthorActions";
-import { validateLink } from "../../validations/formikValidation";
+import { updateBookAction } from "../services/actions/BookActions";
+import { addAuthorAction } from "../services/actions/AuthorActions";
+import { validateLink } from "../validations/formikValidation";
 import { useNavigate } from "react-router-dom";
-import BookCard from "./BookCard";
+import BookCard from "../components/book/BookCard";
 
 import { useParams } from 'react-router-dom';
 import { BookDetails } from '../components/book/BookDelails';
-import { useSelector } from "react-redux";
-import AddBookForm from '../components/book/AddBookForm';
 
 
 const UpdateBookPage = () => {
     const { id } = useParams();
-    const book = useSelector((state) => {state.books.filter(b => b._id === id)});
+    const book = useSelector((state) => {
+      const tmp = state.books.filter(b => b._id === id)
+      return tmp[0];
+    });
     const todayDate = new Date();
     const todayDateStr = todayDate.toISOString().slice(0, 10);
     const [msg, setMsg] = useState("");
@@ -57,14 +58,14 @@ const UpdateBookPage = () => {
         .then((resAuthors) => {
           const bookData = { ...values, author: authorsId };
           axios
-            .patch("http://localhost:4000/api/books", bookData)
+            .patch(`http://localhost:4000/api/books/${book._id}`, bookData)
             .then((response) => {
               const res = response.data;
-              dispatch(addBookAction(res));
+              dispatch(updateBookAction(bookData));
               console.log("Posted data: ", res);
-              if (res.error) setMsg("Couldn't add  a book!");
+              if (res.error) setMsg("Couldn't update  a book!");
               else {
-                setMsg("New book added succesful!");
+                setMsg("New book updated succesful!");
                 setBookCard(<BookCard book={res} />);
               }
               return;
@@ -72,13 +73,18 @@ const UpdateBookPage = () => {
             .then()
             .catch((err) => {
               console.log(err);
-              setMsg("Couldn't add a book!");
+              setMsg("Couldn't update the book!");
             });
         })
         .catch((err) => {
           console.log(err);
         });
     };
+
+    const authorsInitial = book.author.map(aID=>{
+      const bookAuthorInfo = authors.filter(eAuthor => eAuthor._id===aID)[0] //[{fullName: ... _id: ..}, ....]
+      return { fullName: bookAuthorInfo.fullName}
+    })
   
     return (
       <div>
@@ -89,22 +95,16 @@ const UpdateBookPage = () => {
         <Formik
           initialValues={{
             title: book.title,
-            author: 
-              book.author.map(a=>{
-                const bookAuthorInfo = authors.filter(eAuthor => eAuthor.Author._id===a)[0] //[{fullName: ... _id: ..}, ....]
-                return bookAuthorInfo.fullName
-              })
+            author: authorsInitial
+
             ,
-            description: "",
-            publicationDate: "",
-            language: "",
-            comments: [],
-            photo_src: "",
-            stats: {
-              read: 0,
-              wantToRead: 0,
-            },
-            pages: 0,
+            description: book.description,
+            publicationDate: book.publicationDate.slice(0,10),
+            language: book.language,
+            comments: book.comments,
+            photo_src: book.photo_src,
+            stats: book.stats,
+            pages: book.pages,
           }}
           onSubmit={(values, { resetForm }) => {
             handleSubmit(values);

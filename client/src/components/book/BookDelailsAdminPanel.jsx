@@ -31,6 +31,7 @@ const BookDelailsAdminPanel = ({ book }) => {
 
   const handleUpdate = () => {
     console.log("Admin want to update a book ", book._id);
+    navigate(`/update-book/${book._id}`);
   };
   return (
     <div className="flex-column">

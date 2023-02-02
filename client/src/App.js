@@ -9,6 +9,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { AccountSettingsPage } from './pages/AccountSettingsPage';
 import { ShelfsPage } from './pages/ShelfsPage';
+import UpdateBookPage from "./pages/UpdateBookPage"
 
 import { Navbar } from './layouts/nav.js'
 import { Header } from './layouts/header.js'
@@ -74,6 +75,7 @@ function App() {
           <>
           <Route path="/add-book" element={ <AddBookPage /> }/>
           <Route path="/users-list" element={ <UsersListPage /> }/>
+          <Route path="/update-book/:id" element={ <UpdateBookPage /> }/>
           </>
           :
           <>

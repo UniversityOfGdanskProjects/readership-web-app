@@ -70,7 +70,7 @@ export const updateBook = async (req, res) => {
     const { id } = req.params;
     console.log(req.body);
 
-    console.log("UPDATEING A BOOK...")
+    console.log("UPDATING A BOOK...")
     
     if(!mongoose.Types.ObjectId.isValid(id)) {
         console.log('Book not found- no ObjectId');
