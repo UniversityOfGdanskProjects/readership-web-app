@@ -24,13 +24,13 @@ export const postLoginUser = async (req, res) => {
                     userId: user._id,
                     userEmail: user.email,
                 },
-                "RANDOM-TOKEN",
-                { expiresIn: "24h" }
+                "RANDOM-TOKEN"
                 );
                 
             const role = user._id==process.env.ADMIN_ID ? "admin" : "user"
             if(role=="admin") {
                 logF(`ADMIN LOGGED IN - postLoginUser`)
+
                 return res.status(200).json({
                     isLogin: true,
                     role: role,
@@ -39,7 +39,7 @@ export const postLoginUser = async (req, res) => {
 
             }
             logF(`USER ${user.email} LOGGED IN - postLoginUser`)
-            return res.status(200).json({
+            return res.cookie("token", token, {httpOnly: true, sameSite: "none"}).status(200).json({
                 isLogin: true,
                 _id: user._id,
                 email: user.email,

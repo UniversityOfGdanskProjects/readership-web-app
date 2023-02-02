@@ -4,6 +4,7 @@ dotenv.config()
 import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { router as authorsRoutes } from './routes/authorsRoutes.js';
 import { router as booksRoutes } from './routes/booksRoutes.js';
@@ -26,15 +27,20 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
 
 app.use((req, res, next)=> {
     console.log(req.path, req.method);
-    // res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
     // res.header("Access-Control-Allow-Methods", "*");
     // res.header("Access-Control-Allow-Headers", "*");
     // res.header('Content-Type', 'application/json;charset=UTF-8');
-    // res.header('Access-Control-Allow-Credentials', true);
     // res.header(
     //   'Access-Control-Allow-Headers',
     //   'Origin, X-Requested-With, Content-Type, Accept'
