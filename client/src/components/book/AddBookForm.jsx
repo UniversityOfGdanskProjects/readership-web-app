@@ -6,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBookAction } from "../../services/actions/BookActions";
 import { addAuthorAction } from "../../services/actions/AuthorActions";
 import { validateLink } from "../../validations/formikValidation";
-import { useNavigate } from "react-router-dom";
 import BookCard from "./BookCard";
 
 const AddBookForm = () => {
-  const navigate = useNavigate();
   const todayDate = new Date();
   const todayDateStr = todayDate.toISOString().slice(0, 10);
   const [msg, setMsg] = useState("");
@@ -48,7 +46,8 @@ const AddBookForm = () => {
     });
     Promise.all(promises)
       .then((resAuthors) => {
-        const bookData = { ...values, author: authorsId };
+        const genresList = values.genres.map(g => g.genre);
+        const bookData = { ...values, author: authorsId, genres: genresList };
         axios
           .post("http://localhost:4000/api/books", bookData)
           .then((response) => {
@@ -91,6 +90,9 @@ const AddBookForm = () => {
           publicationDate: "",
           language: "",
           photo_src: "",
+          genres: {
+            genre: ""
+          },
           stats: {
             read: 0,
             wantToRead: 0,
@@ -170,6 +172,38 @@ const AddBookForm = () => {
               rows="10"
               required
             />
+            <FieldArray required name="genres">
+              {({ insert, remove, push }) => (
+                <div className="items-center flex-column">
+                  {values.genres.length > 0 &&
+                    values.genres.map((genres, index) => (
+                      <div className="flex-row items-center gap-1" key={index}>
+                        <Field
+                          name={`genres.${index}.genre`}
+                          placeholder="genre"
+                          type="text"
+                          required
+                        />
+
+                        <button
+                          type="button"
+                          className=" m-1 items-center secondary text-xs focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg px-3 py-2 mr-2 mb-2"
+                          onClick={() => remove(index)}
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))}
+                  <button
+                    type="button"
+                    className="secondary all-buttons ml-6"
+                    onClick={() => push({ genre: "" })}
+                  >
+                    Add another genre
+                  </button>
+                </div>
+              )}
+            </FieldArray>
             <label>Publiction date: </label>
             <Field
               name="publicationDate"

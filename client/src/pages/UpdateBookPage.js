@@ -6,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBookAction } from "../services/actions/BookActions";
 import { addAuthorAction } from "../services/actions/AuthorActions";
 import { validateLink } from "../validations/formikValidation";
-import { useNavigate } from "react-router-dom";
 import BookCard from "../components/book/BookCard";
 
 import { useParams } from 'react-router-dom';
-import { BookDetails } from '../components/book/BookDelails';
 
 
 const UpdateBookPage = () => {
@@ -56,7 +54,9 @@ const UpdateBookPage = () => {
       });
       Promise.all(promises)
         .then((resAuthors) => {
-          const bookData = { ...values, author: authorsId };
+          const genresList = values.genres.map(g => g.genre);
+          const bookData = { ...values, author: authorsId, genres: genresList };
+          
           axios
             .patch(`http://localhost:4000/api/books/${book._id}`, bookData)
             .then((response) => {
@@ -85,6 +85,8 @@ const UpdateBookPage = () => {
       const bookAuthorInfo = authors.filter(eAuthor => eAuthor._id===aID)[0] //[{fullName: ... _id: ..}, ....]
       return { fullName: bookAuthorInfo.fullName}
     })
+
+    const genresInitial = book.genres.map(g => {return {genre: g}})
   
     return (
       <div>
@@ -95,9 +97,8 @@ const UpdateBookPage = () => {
         <Formik
           initialValues={{
             title: book.title,
-            author: authorsInitial
-
-            ,
+            author: authorsInitial,
+            genres: genresInitial,
             description: book.description,
             publicationDate: book.publicationDate.slice(0,10),
             language: book.language,
@@ -179,6 +180,38 @@ const UpdateBookPage = () => {
                 className="border w-3/4 text-sm p-2"
                 required
               />
+              <FieldArray required name="genres">
+              {({ insert, remove, push }) => (
+                <div className="items-center flex-column">
+                  {values.genres.length > 0 &&
+                    values.genres.map((genres, index) => (
+                      <div className="flex-row items-center gap-1" key={index}>
+                        <Field
+                          name={`genres.${index}.genre`}
+                          placeholder="genre"
+                          type="text"
+                          required
+                        />
+
+                        <button
+                          type="button"
+                          className=" m-1 items-center secondary text-xs focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg px-3 py-2 mr-2 mb-2"
+                          onClick={() => remove(index)}
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))}
+                  <button
+                    type="button"
+                    className="secondary all-buttons ml-6"
+                    onClick={() => push({ genre: "" })}
+                  >
+                    Add another genre
+                  </button>
+                </div>
+              )}
+            </FieldArray>
               <label>Publiction date: </label>
               <Field
                 name="publicationDate"
