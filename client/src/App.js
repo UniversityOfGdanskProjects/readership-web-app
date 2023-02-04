@@ -24,7 +24,7 @@ import { SearchBooksPage } from './pages/SearchBooks';
 import { AddBookPage } from './pages/AddBookPage';
 import {UsersListPage} from './pages/UsersListPage'
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch(); // zrobić store'a

@@ -65,3 +65,23 @@ export const updateComment = async (req, res) => {
     };
     res.status(200).json(comment);
 };
+
+
+// GET COMMENTS AMOUNT
+
+export const getCommentAmount = async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error: 'Comment not found- no ObjectId'});
+    };
+
+    const commentsAmount = await Comment.aggregate([{$match: {book: new mongoose.Types.ObjectId(id)}}, 
+    {$group: {_id: "$book", commentAmount : {$count : {}}}}
+]);
+    if(!commentsAmount) {
+        return res.status(404).json({error: 'Comment not found'});
+    };
+    res.status(200).json(commentsAmount);
+
+}

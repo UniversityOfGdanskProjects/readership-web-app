@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import logF from 'log-to-file';
 
 import { router as authorsRoutes } from './routes/authorsRoutes.js';
 import { router as booksRoutes } from './routes/booksRoutes.js';
@@ -29,22 +30,23 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true
   }));
 
 app.use((req, res, next)=> {
     console.log(req.path, req.method);
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    logF(req.path, req.method);
+    res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
     // res.header("Access-Control-Allow-Methods", "*");
     // res.header("Access-Control-Allow-Headers", "*");
     // res.header('Content-Type', 'application/json;charset=UTF-8');
-    // res.header(
-    //   'Access-Control-Allow-Headers',
-    //   'Origin, X-Requested-With, Content-Type, Accept'
-    // );
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+    );
     next();
 });
 

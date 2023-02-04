@@ -3,6 +3,7 @@ import { deleteCommentAction } from "../../services/actions/CommentActions";
 import { useGlobal } from "../../services/context/GlobalContext";
 import Swal from "sweetalert2/src/sweetalert2.js";
 import axios from "axios";
+import {useEffect, useState} from "react"
 
 const Comments = ({ book }) => {
   const { currentUserID, currentRole } = useGlobal();
@@ -11,6 +12,17 @@ const Comments = ({ book }) => {
     return state.comments.filter((c) => c.book === book._id);
   });
   const users = useSelector((state) => state.users);
+  
+  const [commentAmount, setCommentAmount] = useState(null);
+
+  useEffect(() => {
+    axios.get(`http://localhost:4000/api/comments/comment-amount/${book._id}`).then(res => {
+      console.log(res.data);
+      setCommentAmount(res.data[0].commentAmount);
+  })
+  }, []);
+
+   
 
   const deleteComment = (id) => {
     Swal.fire({ title: "Delete comment?", showCancelButton: true }).then(
@@ -29,7 +41,7 @@ const Comments = ({ book }) => {
   };
   return (
     <div>
-      <h1 className="text-xl mt-2 mb-8">Comments ( {comments.length} )</h1>
+      <h1 className="text-xl mt-2 mb-8">Comments ( {commentAmount} )</h1>
       {comments.sort((a,b) => b.date - a.date).map((c) => {
         const user = users.filter((u) => u._id === c.user)[0];
         return (

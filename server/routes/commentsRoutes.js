@@ -8,7 +8,8 @@ import {
     getComment,
     createComment,
     deleteComment,
-    updateComment
+    updateComment,
+    getCommentAmount
 } from '../controllers/commentsController.js';
 
 // GET all 
@@ -24,4 +25,6 @@ router.post('/', createComment);
 router.delete('/:id', deleteComment);
 
 // UPDATE one
-router.patch('/:id', updateComment);
+router.patch('/:id', updateComment); 
+
+router.get('/comment-amount/:id', getCommentAmount);
