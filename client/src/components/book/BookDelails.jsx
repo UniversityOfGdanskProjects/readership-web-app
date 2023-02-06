@@ -3,9 +3,12 @@ import { useSelector } from "react-redux";
 import BookDetailsUserPanel from "./BookDeltailsUserPanel";
 import BookDelailsAdminPanel from "./BookDelailsAdminPanel";
 import Comments from "./Comment";
+import {useEffect, useState} from "react"
 
 export const BookDetails = ({ book, bookAuthors }) => {
   const { currentRole, loading } = useGlobal();
+  const [readCounter, setReadCounter] = useState(null);
+  const [wantToReadCounter, setWantToReadCounter] = useState(null);
   const bookAuthors2 = useSelector((state) => {
     return state.authors.map((author) =>
       book.author.map((bookAuthor) => {
@@ -15,7 +18,27 @@ export const BookDetails = ({ book, bookAuthors }) => {
   });
   if (bookAuthors === undefined) {
     bookAuthors = bookAuthors2;
-  }
+  };
+
+  const stats = useSelector(state => { 
+    let wantToReadCounter = 0
+    let readCounter = 0
+    state.users.filter(user => {
+    if (user.shelfs["want to read"].indexOf(book._id) !== -1) {
+      wantToReadCounter += 1
+    }  
+    if (user.shelfs["read"].indexOf(book._id) !== -1) {
+      readCounter += 1 
+    }
+    return true
+  })
+    return {wantToRead: wantToReadCounter, read : readCounter};
+  })
+
+  useEffect(() => {
+    setReadCounter(stats?.read);
+    setWantToReadCounter(stats?.wantToRead);
+  }, []);
 
   return (
     <div className="">
@@ -60,13 +83,22 @@ export const BookDetails = ({ book, bookAuthors }) => {
                       </div>
                       <div className="">Publisher: {book.publisher}</div>
                       <div className="">Language: {book.language}</div>
+
+                      <div className="mt-2">Read: {readCounter}</div>
+                      <div className="">Want to read: {wantToReadCounter}</div>
                     </div>
                   </div>
                   <div className="flex">
                     {currentRole === "admin" ? (
                       <BookDelailsAdminPanel book={book} />
                     ) : (
-                      <BookDetailsUserPanel book={book} />
+                      <BookDetailsUserPanel 
+                      book={book} 
+                      setReadCounter={setReadCounter} 
+                      setWantToReadCounter={setWantToReadCounter}
+                      wantToReadCounter = {wantToReadCounter}
+                      readCounter = {readCounter}
+                      />
                     )}
                   </div>
                 </div>

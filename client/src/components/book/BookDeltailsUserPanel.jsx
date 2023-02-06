@@ -6,7 +6,7 @@ import Swal from "sweetalert2/src/sweetalert2.js";
 import { updateUserAction } from "../../services/actions/UserActions";
 import { AddComment } from "./AddComment";
 
-const BookDetailsUserPanel = ({ book }) => {
+const BookDetailsUserPanel = ({ book , setReadCounter, setWantToReadCounter, readCounter, wantToReadCounter}) => {
   const { currentUserID, loading } = useGlobal();
   const dispatch = useDispatch();
   const delButton = ( <svg
@@ -39,9 +39,18 @@ const BookDetailsUserPanel = ({ book }) => {
     if (shelfName === "read") {
         to = "read"
         from = "want to read"
+        setReadCounter(readCounter + 1);
+        if (userShelfs["want to read"].indexOf !== -1) {
+          setWantToReadCounter(wantToReadCounter -1);
+        }
+
     } else {
         to = "want to read"
         from = "read"
+        setWantToReadCounter(wantToReadCounter +1 );
+        if (userShelfs["read"].indexOf !== -1) {
+          setReadCounter(readCounter - 1);
+        }
     }
     axios.patch(`http://localhost:4000/api/users/move-read/${currentUserID}`, {bookID: book._id, toShelf: to , fromShelf: from}).then(res => {
       const updatedShelfs = res.data.shelfs
@@ -103,6 +112,8 @@ const BookDetailsUserPanel = ({ book }) => {
                 shelfToUpDate: dataToUpdate,
               })
             );
+            if (shelfName === "read") setReadCounter(readCounter -1);
+            if (shelfName === "want to read") setWantToReadCounter(wantToReadCounter -1);
             Swal.fire("", `${book.title} removed from "${shelfName}"`);
           })
           .catch((err) => {
@@ -134,7 +145,6 @@ const BookDetailsUserPanel = ({ book }) => {
             >
               {["read", "want to read"]
                 .map((shelfName) => {
-                  console.log(userShelfs, shelfName);
                   return (
                     <div key={shelfName}>
                       {userShelfs[shelfName].indexOf(book._id) !== -1 ? (
@@ -191,7 +201,7 @@ const BookDetailsUserPanel = ({ book }) => {
               {Object.keys(userShelfs)
                 .filter((s) => s !== "read" && s!== "want to read")
                 .map((shelfName) => {
-                  console.log(userShelfs, shelfName);
+                  
                   return (
                     <div key={shelfName}>
                       {userShelfs[shelfName].indexOf(book._id) !== -1 ? (

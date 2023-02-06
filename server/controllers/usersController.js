@@ -181,7 +181,7 @@ export const updateUser = async (req, res) => {
 
 export const getUsersAmount = async (req, res) => {
 
-    const usersAmount = await User.aggregate([ 
+    const usersAmount = await User.aggregate([ {$match : {username : {$exists : true}}},
     {$group: {_id: null, userAmount : {$count : {}}}}
 ]);
     if(!usersAmount) {
