@@ -22,6 +22,7 @@ export const HomePage = () => {
       return <BookCard key={book._id} book={book} />;
     });
 
+    
     useEffect(() => {
 
       const books = axios.get("http://localhost:4000/api/books")
@@ -49,6 +50,8 @@ export const HomePage = () => {
   
       })
       .catch(err => console.log(err))
+
+
     }, []);
   
     return (
