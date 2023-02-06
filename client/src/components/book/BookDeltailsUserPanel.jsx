@@ -33,18 +33,38 @@ const BookDetailsUserPanel = ({ book }) => {
     
   });
 
+  const addToReadWant = (shelfName) => {
+    let to
+    let from
+    if (shelfName === "read") {
+        to = "read"
+        from = "want to read"
+    } else {
+        to = "want to read"
+        from = "read"
+    }
+    axios.patch(`http://localhost:4000/api/users/move-read/${currentUserID}`, {bookID: book._id, toShelf: to , fromShelf: from}).then(res => {
+      const updatedShelfs = res.data.shelfs
+      console.log("read/want updated:", updatedShelfs);
+      dispatch(updateUserAction(res.data));
+      dispatch(
+        updateShelfAction({
+          user_id: currentUserID,
+          shelfToUpDate: {"read" : updatedShelfs["read"], "want to read": updatedShelfs["want to read"]}
+        })
+      );
+    })
+  }
+
   const addToShelf = (shelfName) => {
-    console.log("shelfName", shelfName, "\nuserShelfs", userShelfs);
     const tmp = userShelfs[shelfName];
     tmp.push(book._id);
     const dataToUpdate = { [shelfName]: tmp };
-    console.log("dataToUpdate", dataToUpdate);
     axios
       .patch(`http://localhost:4000/api/users/${currentUserID}`, {
         shelfs: { ...userShelfs, ...dataToUpdate },
       })
       .then((res) => {
-        console.log("Updated account data: ", currentUserID, res.data);
         dispatch(updateUserAction(res.data));
         dispatch(
           updateShelfAction({
@@ -131,7 +151,7 @@ const BookDetailsUserPanel = ({ book }) => {
                         <li
                           className="mr-2 mt-0.5 p-2.5 hover:cursor-pointer rounded-lg hover:bg-green-400"
                           onClick={() => {
-                            addToShelf(shelfName);
+                            addToReadWant(shelfName);
                           }}
                         >
                           {shelfName}

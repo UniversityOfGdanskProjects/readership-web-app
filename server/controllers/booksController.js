@@ -89,3 +89,17 @@ export const updateBook = async (req, res) => {
     
     return res.status(200).json(updatedBook);
 };
+
+// amout of read / want to read
+
+export const getUsersAmount = async (req, res) => {
+
+    const usersAmount = await Users.aggregate([ 
+    {$group: {_id: null, userAmount : {$count : {}}}}
+]);
+    if(!usersAmount) {
+        return res.status(404).json({error: 'Could not '});
+    };
+    res.status(200).json(usersAmount);
+
+}

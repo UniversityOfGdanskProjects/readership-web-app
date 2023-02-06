@@ -131,11 +131,7 @@ export const deleteUser = async (req, res) => {
             res.status(200).json({userId: id});
           }
     
-
- 
-
-    
-}
+};
 
 // UPDATE one
 export const updateUser = async (req, res) => {
@@ -179,4 +175,59 @@ export const updateUser = async (req, res) => {
         })
     })
 
+};
+
+// amout of users
+
+export const getUsersAmount = async (req, res) => {
+
+    const usersAmount = await User.aggregate([ 
+    {$group: {_id: null, userAmount : {$count : {}}}}
+]);
+    if(!usersAmount) {
+        return res.status(404).json({error: 'Could not find amount'});
+    };
+    res.status(200).json(usersAmount);
+
+};
+
+// read-move
+
+export const updateMoveRead = async (req, res) => {
+    const {id} = req.params
+    console.log(req.body, id);
+    const bookID = req.body.bookID
+    const fromShelf = req.body.fromShelf
+    const toShelf = req.body.toShelf
+
+   User.findOne({_id: id}).then( userInfo => {
+
+        console.log(userInfo);
+       const userShelfs = userInfo.shelfs
+   
+       // remove
+       const removedBookShelf = userShelfs[fromShelf].filter( b => b != bookID);
+       User.findOneAndUpdate({_id: id}, {shelfs: {...userShelfs, [fromShelf]: removedBookShelf}}).then(r => {
+   
+        User.findOne({_id: id}).then( resAfterRm => {
+            // add
+            const updatedShelfs = resAfterRm.shelfs
+            updatedShelfs[toShelf].push(bookID);
+            console.log("user shelf after add", toShelf, updatedShelfs);
+            User.findOneAndUpdate({_id: id}, {shelfs: {...updatedShelfs}}).then(r => {
+    
+                // return
+                User.findOne({_id: id}).then(userUpdated => {
+                    logF('User updated');
+                    return res.status(200).json(userUpdated);
+             });
+            });
+            
+        })
+   })
+
+    }).catch(err => {
+        console.log(err);
+        res.status(404).json({error: err.message});
+    });
 };

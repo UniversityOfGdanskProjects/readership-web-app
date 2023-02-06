@@ -7,7 +7,9 @@ import {
     createUser,
     deleteUser,
     updateUser,
-    postLoginUser
+    postLoginUser,
+    getUsersAmount,
+    updateMoveRead
 } from '../controllers/usersController.js';
 
 // GET all 
@@ -15,6 +17,9 @@ router.get('/', getUsers);
 
 // POST 
 router.post('/login', postLoginUser);
+
+// amount of users
+router.get('/amount', getUsersAmount);
 
 // GET one
 router.get('/:id', getUser);
@@ -28,3 +33,5 @@ router.delete('/:id', deleteUser);
 // UPDATE one
 router.patch('/:id', updateUser);
 
+// move - read
+router.patch('/move-read/:id', updateMoveRead);
